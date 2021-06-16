@@ -17,9 +17,7 @@ class ForecastController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        v
-        
+                
     }
     
 }
