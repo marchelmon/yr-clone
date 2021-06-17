@@ -46,10 +46,11 @@ extension SettingsController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) as? SettingsCell else { return }
+        let tableData = Service.shared.getSettingData(fromType: cell.settingsRow!.type)
         
-        let controller = SetSettingController()
-        
-        
+        let controller = SetSettingController(withTableData: tableData, selectedIndex: 0)
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     

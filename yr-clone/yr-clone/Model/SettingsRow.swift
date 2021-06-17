@@ -8,7 +8,7 @@
 import UIKit
 
 
-enum SettingType: CustomStringConvertible {
+enum SettingType {
     case start
     case temp
     case wind
@@ -17,40 +17,17 @@ enum SettingType: CustomStringConvertible {
     case notifications
     case locationBased
     case mainLocation
-    
-    
-    var description: String {
-        switch self {
-        case .start:
-            print("Start")
-        case .temp:
-            print("Temp")
-        case .wind:
-            print("wind")
-        case .length:
-            print("lenght")
-        case .language:
-            print("lang")
-        case .notifications:
-            print("nitoce")
-        case .locationBased:
-            print("LBased")
-        case .mainLocation:
-            print("main location")
-        }
-        return "snopp SettingType"
-    }
-    
-    
 }
 
 struct SettingsRow {
+    let type: SettingType
     let icon: UIImage?
     let text: String
     let selectionText: String
     let hasArrow: Bool
     
-    init(text: String, selectionText: String, icon: UIImage?, hasArrow: Bool) {
+    init(withSettingType type: SettingType, text: String, selectionText: String, icon: UIImage?, hasArrow: Bool) {
+        self.type = type
         self.text = text
         self.selectionText = selectionText
         self.icon = icon
