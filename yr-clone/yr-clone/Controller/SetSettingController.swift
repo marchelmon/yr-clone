@@ -1,35 +1,23 @@
 //
-//  SettingsController.swift
+//  SetSettingController.swift
 //  yr-clone
 //
-//  Created by marchelmon on 2021-06-16.
+//  Created by marchelmon on 2021-06-17.
 //
 
 import UIKit
 
+private let reuseIdentifier = "SetSettingCell"
 
-private let settingsCellIdentifier = "SettingsCell"
-
-class SettingsController: UITableViewController {
-    
-    //MARK: - Properties
+class SetSettingController: UITableViewController {
     
     
-    //MARK: - Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.register(SettingsCell.self, forCellReuseIdentifier: settingsCellIdentifier)
-        
-        
-    }
     
 }
 
 //MARK: - UITableViewDelegate and UITableViewDataSource
 
-extension SettingsController {
+extension SetSettingController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
@@ -47,14 +35,9 @@ extension SettingsController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let controller = SetSettingController()
         
         
     }
     
     
 }
-
-
-
-

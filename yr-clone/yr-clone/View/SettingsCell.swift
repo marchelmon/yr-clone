@@ -17,16 +17,30 @@ class SettingsCell: UITableViewCell {
     }
     var cellLabel: UILabel = {
         let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
-    var iconImage = UIImageView()
+    var iconImage: UIImageView =  {
+        let iv = UIImageView()
+        iv.setDimensions(width: 28, height: 28)
+        return iv
+    }()
+    private let arrowIcon: UIImageView = {
+        let image = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysOriginal)
+        let iv = UIImageView(image: image)
+        return iv
+    }()
     
-    private let arrowIcon = UIImageView(image: UIImage(systemName: "chevron.right"))
+    var selectionText: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .gray
+        return label
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
     required init?(coder: NSCoder) {
@@ -39,13 +53,24 @@ class SettingsCell: UITableViewCell {
         guard let data = settingsRow else { return }
         
         cellLabel.text = data.text
-        iconImage = data.icon
+        selectionText.text = data.selectionText
+        iconImage.image = data.icon
         
         addSubview(iconImage)
-        iconImage.centerY(inView: self)
+        iconImage.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
         
-        addSubview(cellLabel)
+        let textStack = UIStackView(arrangedSubviews: [cellLabel, selectionText])
+        textStack.axis = .vertical
         
+        addSubview(textStack)
+        textStack.centerY(inView: self, leftAnchor: iconImage.rightAnchor, paddingLeft: 15)
+
+        if data.hasArrow {
+            addSubview(arrowIcon)
+            arrowIcon.centerY(inView: self)
+            arrowIcon.anchor(right: rightAnchor, paddingtRight: 15)
+        }
+
         
         
     }

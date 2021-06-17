@@ -157,7 +157,7 @@
             </objects>
             <point key="canvasLocation" x="-125" y="-427"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Settings-->
         <scene sceneID="2NZ-Fn-cRH">
             <objects>
                 <tableViewController id="9uP-ta-GHp" customClass="SettingsController" customModule="yr_clone" customModuleProvider="target" sceneMemberID="viewController">
@@ -180,7 +180,7 @@
                             <outlet property="delegate" destination="9uP-ta-GHp" id="Vjr-z9-0yL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="VC3-Rw-zxT"/>
+                    <navigationItem key="navigationItem" title="Settings" id="VC3-Rw-zxT"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Jv-Py-eed" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
