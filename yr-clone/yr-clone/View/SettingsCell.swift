@@ -54,25 +54,46 @@ class SettingsCell: UITableViewCell {
         
         cellLabel.text = data.text
         selectionText.text = data.selectionText
-        iconImage.image = data.icon
-        
-        addSubview(iconImage)
-        iconImage.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
         
         let textStack = UIStackView(arrangedSubviews: [cellLabel, selectionText])
         textStack.axis = .vertical
-        
-        addSubview(textStack)
-        textStack.centerY(inView: self, leftAnchor: iconImage.rightAnchor, paddingLeft: 15)
 
-        if data.hasArrow {
-            addSubview(arrowIcon)
-            arrowIcon.centerY(inView: self)
-            arrowIcon.anchor(right: rightAnchor, paddingtRight: 15)
+        if data.icon != nil {
+            iconImage.image = data.icon
+        
+            addSubview(iconImage)
+            iconImage.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
+        
+            addSubview(textStack)
+            textStack.centerY(inView: self, leftAnchor: iconImage.rightAnchor, paddingLeft: 15)
+        } else {
+            addSubview(textStack)
+            textStack.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
         }
+        
+        if data.hasArrow { addArrow() }
 
+    }
+    
+    func addArrow() {
+        addSubview(arrowIcon)
+        arrowIcon.centerY(inView: self)
+        arrowIcon.anchor(right: rightAnchor, paddingtRight: 15)
+    }
+
+    func addOverline() {
+        let line = UIView()
+        line.backgroundColor = .lightGray
         
+        addSubview(line)
+        line.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 1)
+    }
+    func addUnderline() {
+        let line = UIView()
+        line.backgroundColor = .lightGray
         
+        addSubview(line)
+        line.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
     }
     
 }

@@ -46,14 +46,29 @@ class SettingsController: UITableViewController {
 
 extension SettingsController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        2
+    }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        70
+    }
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 70))
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Service.shared.settingRows.count // + 1 TODO
+        return section == 0 ? Service.shared.settingRows.count : 2
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: settingsCellIdentifier, for: indexPath) as! SettingsCell
-        cell.settingsRow = Service.shared.settingRows[indexPath.row]
+        if indexPath.section == 0 {
+            cell.settingsRow = Service.shared.settingRows[indexPath.row]
+            if indexPath.row == 0 { cell.addOverline() }
+            if indexPath.row == Service.shared.settingRows.count - 1 { cell.addUnderline() }
+        } else {
+            cell.textLabel?.text = indexPath.row == 0 ? "About" : "Data"
+            if indexPath.row == 0 { cell.addOverline() }
+            if indexPath.row == 1 { cell.addUnderline() }
+            cell.addArrow()
+        }
         return cell
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -61,17 +76,18 @@ extension SettingsController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        guard let cell = tableView.cellForRow(at: indexPath) as? SettingsCell else { return }
-        lastSelectedCell = cell
-        
-        guard let selectedRowType = cell.settingsRow?.type else { return }
-        
-        currentTypeSelection = selectedRowType
-        let tableData = Service.shared.getSettingData(fromType: selectedRowType)
-        
-        let controller = SetSettingController(withTableData: tableData, selectedIndex: 0, parentController: self)
-        navigationController?.pushViewController(controller, animated: true)
+        if indexPath.section == 0 {
+            guard let cell = tableView.cellForRow(at: indexPath) as? SettingsCell else { return }
+            lastSelectedCell = cell
+            
+            guard let selectedRowType = cell.settingsRow?.type else { return }
+            
+            currentTypeSelection = selectedRowType
+            let tableData = Service.shared.getSettingData(fromType: selectedRowType)
+            
+            let controller = SetSettingController(withTableData: tableData, selectedIndex: 0, parentController: self)
+            navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     
