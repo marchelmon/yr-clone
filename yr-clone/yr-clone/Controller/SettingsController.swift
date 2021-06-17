@@ -14,6 +14,8 @@ class SettingsController: UITableViewController {
     
     //MARK: - Properties
     
+    private var currentTypeSelection: SettingType?
+    private var lastSelectedCell: SettingsCell?
     
     //MARK: - Lifecycle
     
@@ -22,6 +24,19 @@ class SettingsController: UITableViewController {
         
         tableView.register(SettingsCell.self, forCellReuseIdentifier: settingsCellIdentifier)
         
+        
+    }
+    
+    
+    //MARK: - Helpers
+    
+    func handleNewDataSelection(withIndex index: Int) {
+        guard let currentType = currentTypeSelection else { return }
+        let newData = Service.shared.getItemFromSettingData(withType: currentType, withIndex: index)
+        
+        guard let cell = lastSelectedCell else { return }
+        
+        cell.selectionText.text = newData
         
     }
     
@@ -46,10 +61,16 @@ extension SettingsController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let cell = tableView.cellForRow(at: indexPath) as? SettingsCell else { return }
-        let tableData = Service.shared.getSettingData(fromType: cell.settingsRow!.type)
         
-        let controller = SetSettingController(withTableData: tableData, selectedIndex: 0)
+        guard let cell = tableView.cellForRow(at: indexPath) as? SettingsCell else { return }
+        lastSelectedCell = cell
+        
+        guard let selectedRowType = cell.settingsRow?.type else { return }
+        
+        currentTypeSelection = selectedRowType
+        let tableData = Service.shared.getSettingData(fromType: selectedRowType)
+        
+        let controller = SetSettingController(withTableData: tableData, selectedIndex: 0, parentController: self)
         navigationController?.pushViewController(controller, animated: true)
     }
     

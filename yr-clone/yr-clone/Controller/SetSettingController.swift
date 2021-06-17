@@ -14,13 +14,16 @@ class SetSettingController: UITableViewController {
     //MARK: - Properties
     
     private let tableData: [String]
-    private let selectedIndex: Int
+    private let parentController: SettingsController
+    private var selectedIndex: Int
+
     
     //MARK: - Lifecycle
     
-    init(withTableData data: [String], selectedIndex: Int) {
+    init(withTableData data: [String], selectedIndex: Int, parentController: SettingsController) {
         self.tableData = data
         self.selectedIndex = selectedIndex
+        self.parentController = parentController
         super.init(nibName: nil, bundle: nil)
         
     }
@@ -53,13 +56,23 @@ extension SetSettingController {
         cell.accessoryType = indexPath.row == selectedIndex ? .checkmark : .none
         return cell
     }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         for row in 0...tableData.count {
             let rowIndexPath = IndexPath(item: row, section: 0)
             guard let cell = tableView.cellForRow(at: rowIndexPath) else { return }
-            cell.accessoryType = indexPath.row == row  ? .checkmark : .none
+            if row == indexPath.row {
+                cell.accessoryType = .checkmark
+                selectedIndex = indexPath.row
+                parentController.handleNewDataSelection(withIndex: selectedIndex)
+            } else {
+                cell.accessoryType = .none
+            }
         }
+        
     }
     
     
