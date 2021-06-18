@@ -83,14 +83,14 @@ class SettingsCell: UITableViewCell {
 
     func addOverline() {
         let line = UIView()
-        line.backgroundColor = .lightGray
+        line.backgroundColor = #colorLiteral(red: 0.9038110723, green: 0.9038110723, blue: 0.9038110723, alpha: 1)
         
         addSubview(line)
         line.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 1)
     }
     func addUnderline() {
         let line = UIView()
-        line.backgroundColor = .lightGray
+        line.backgroundColor = #colorLiteral(red: 0.9038110723, green: 0.9038110723, blue: 0.9038110723, alpha: 1)
         
         addSubview(line)
         line.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
