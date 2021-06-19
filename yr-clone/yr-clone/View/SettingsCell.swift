@@ -12,7 +12,11 @@ class SettingsCell: UITableViewCell {
     
     var settingsRow: SettingsRow? {
         didSet {
-            configureCell()
+            if settingsRow != nil {
+                configureCell()
+            } else {
+                emptyCell()
+            }
         }
     }
     var cellLabel: UILabel = {
@@ -37,6 +41,7 @@ class SettingsCell: UITableViewCell {
         label.textColor = .gray
         return label
     }()
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -48,6 +53,12 @@ class SettingsCell: UITableViewCell {
     }
     
     //MARK: - Helpers
+    
+    func emptyCell() {
+        subviews.forEach({ view in
+            view.removeFromSuperview()
+        })
+    }
     
     func configureCell() {
         guard let data = settingsRow else { return }
@@ -84,16 +95,20 @@ class SettingsCell: UITableViewCell {
     func addOverline() {
         let line = UIView()
         line.backgroundColor = #colorLiteral(red: 0.9038110723, green: 0.9038110723, blue: 0.9038110723, alpha: 1)
-        
         addSubview(line)
         line.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 1)
     }
-    func addUnderline() {
+    func addUnderline(withLeftPadding padding: CGFloat = 0) {
         let line = UIView()
         line.backgroundColor = #colorLiteral(red: 0.9038110723, green: 0.9038110723, blue: 0.9038110723, alpha: 1)
-        
         addSubview(line)
-        line.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
+        line.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingLeft: padding, height: 1)
+    }
+    
+    func addTextLabel(withText text: String) {
+        cellLabel.text = text
+        addSubview(cellLabel)
+        cellLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
     }
     
 }

@@ -28,7 +28,7 @@
             </objects>
             <point key="canvasLocation" x="823" y="-11"/>
         </scene>
-        <!--Weather Map Controller-->
+        <!--Current location-->
         <scene sceneID="lqW-hm-he3">
             <objects>
                 <viewController id="1Kq-CE-WZ0" customClass="WeatherMapController" customModule="yr_clone" customModuleProvider="target" sceneMemberID="viewController">
@@ -38,7 +38,14 @@
                         <viewLayoutGuide key="safeArea" id="nPA-6m-ndQ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="FFb-VZ-OD4"/>
+                    <navigationItem key="navigationItem" title="Current location" id="FFb-VZ-OD4">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="star" catalog="system" id="1b6-s2-Hj9">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="Gw8-hs-Udf">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Iu-Ec-z8m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -61,7 +68,7 @@
             </objects>
             <point key="canvasLocation" x="1788" y="-427"/>
         </scene>
-        <!--Forecast Controller-->
+        <!--Current Location-->
         <scene sceneID="xwT-Ui-b4v">
             <objects>
                 <tableViewController id="3rM-83-GQY" customClass="ForecastController" customModule="yr_clone" customModuleProvider="target" sceneMemberID="viewController">
@@ -84,7 +91,23 @@
                             <outlet property="delegate" destination="3rM-83-GQY" id="Om3-RD-07k"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="J3r-az-u4l"/>
+                    <toolbarItems>
+                        <barButtonItem systemItem="search" id="T7Z-Ua-zFM">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                        <barButtonItem systemItem="search" id="6S1-xb-I1D">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Current Location" id="J3r-az-u4l">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="star" catalog="system" id="nA3-F2-xrt">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="F4k-lj-nbR">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U3x-I4-u6H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -109,7 +132,7 @@
             </objects>
             <point key="canvasLocation" x="-126" y="556"/>
         </scene>
-        <!--Favorites Controller-->
+        <!--Current location-->
         <scene sceneID="PBg-k3-xFs">
             <objects>
                 <tableViewController id="gO4-NZ-RZN" customClass="FavoritesController" customModule="yr_clone" customModuleProvider="target" sceneMemberID="viewController">
@@ -132,7 +155,14 @@
                             <outlet property="delegate" destination="gO4-NZ-RZN" id="rZO-WF-MLf"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="3zp-FY-E0e"/>
+                    <navigationItem key="navigationItem" title="Current location" id="Acc-yb-dqa">
+                        <barButtonItem key="leftBarButtonItem" image="star" catalog="system" id="yzs-Bv-cfr">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="xNk-zS-mn7">
+                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HST-TG-D2s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -207,7 +237,9 @@
     <resources>
         <image name="gearshape" catalog="system" width="128" height="121"/>
         <image name="heart" catalog="system" width="128" height="109"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="map" catalog="system" width="128" height="110"/>
+        <image name="star" catalog="system" width="128" height="116"/>
         <image name="sun.max" catalog="system" width="128" height="124"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

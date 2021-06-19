@@ -17,16 +17,42 @@ class SettingsController: UITableViewController {
     private var currentTypeSelection: SettingType?
     private var lastSelectedCell: SettingsCell?
     
+    private lazy var footerImage: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "weather.png").withRenderingMode(.alwaysOriginal))
+        iv.contentMode = .scaleAspectFit
+        return iv
+    }()
+    
+    private lazy var footerView: UIView = {
+        let footer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+        let image = UIImageView(image: #imageLiteral(resourceName: "weather.png").withRenderingMode(.alwaysOriginal))
+        image.contentMode = .scaleAspectFit
+        footer.addSubview(footerImage)
+        footerImage.centerY(inView: footer)
+        return footer
+    }()
+    
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(SettingsCell.self, forCellReuseIdentifier: settingsCellIdentifier)
+        tableView.separatorStyle = .none
         
-        
+        tableView.tableFooterView = footerView
+
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.current.orientation.isLandscape {
+            tableView.tableFooterView = nil
+        } else {
+            tableView.tableFooterView = footerView
+        }
+    }
     
     //MARK: - Helpers
     
@@ -46,10 +72,10 @@ class SettingsController: UITableViewController {
 
 extension SettingsController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        return 2
     }
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        70
+        return 70
     }
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 70))
@@ -59,15 +85,25 @@ extension SettingsController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: settingsCellIdentifier, for: indexPath) as! SettingsCell
+        cell.settingsRow = nil
         if indexPath.section == 0 {
+            
             cell.settingsRow = Service.shared.settingRows[indexPath.row]
             if indexPath.row == 0 { cell.addOverline() }
-            if indexPath.row == Service.shared.settingRows.count - 1 { cell.addUnderline() }
+            let underlinePadding = indexPath.row == Service.shared.settingRows.count - 1 ? 0 : 15
+            cell.addUnderline(withLeftPadding: CGFloat(underlinePadding))
+            
         } else {
-            cell.textLabel?.text = indexPath.row == 0 ? "About" : "Data"
-            if indexPath.row == 0 { cell.addOverline() }
-            if indexPath.row == 1 { cell.addUnderline() }
+            
+            let text = indexPath.row == 0 ? "About" : "Data"
+            cell.addTextLabel(withText: text)
             cell.addArrow()
+            if indexPath.row == 0 {
+                cell.addOverline()
+                cell.addUnderline(withLeftPadding: 15)
+            }
+            if indexPath.row == 1 { cell.addUnderline() }
+            
         }
         return cell
     }
@@ -89,7 +125,6 @@ extension SettingsController {
             navigationController?.pushViewController(controller, animated: true)
         }
     }
-    
     
 }
 
