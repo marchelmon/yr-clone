@@ -81,16 +81,16 @@ extension SettingsController {
         return UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 70))
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? Service.shared.settingRows.count : 2
+        return section == 0 ? Dummy.shared.settingRows.count : 2
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: settingsCellIdentifier, for: indexPath) as! SettingsCell
         cell.settingsRow = nil
         if indexPath.section == 0 {
             
-            cell.settingsRow = Service.shared.settingRows[indexPath.row]
+            cell.settingsRow = Dummy.shared.settingRows[indexPath.row]
             if indexPath.row == 0 { cell.addOverline() }
-            let underlinePadding = indexPath.row == Service.shared.settingRows.count - 1 ? 0 : 15
+            let underlinePadding = indexPath.row == Dummy.shared.settingRows.count - 1 ? 0 : 15
             cell.addUnderline(withLeftPadding: CGFloat(underlinePadding))
             
         } else {
