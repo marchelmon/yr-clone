@@ -15,7 +15,8 @@ protocol WeatherManagerDelegate {
 
 struct WeatherManager {
     
-    private let weatherUrl = "http://api.openweathermap.org/data/2.5/weather?appid=0ce0d5426849eda5b4f59f0540eb2789&units=metric"
+    private let weatherUrl = "https://api.openweathermap.org/data/2.5/weather?appid=0ce0d5426849eda5b4f59f0540eb2789&units=metric"
+    private let foreCastUrl = "https://api.openweathermap.org/data/2.5/forecast?appid=0ce0d5426849eda5b4f59f0540eb2789&units=metric"
     
     var delegate: WeatherManagerDelegate?
     
@@ -27,6 +28,10 @@ struct WeatherManager {
     func fetchWeather(withLatitude lat: CLLocationDegrees, withLongitude lon: CLLocationDegrees) {
         let urlString = "\(weatherUrl)&lat=\(lat)&lon=\(lon)"
         performRequest(urlString: urlString)
+    }
+    
+    func fetchForecast(forCity city: String) {
+        
     }
     
     func performRequest(urlString: String) {
@@ -50,14 +55,16 @@ struct WeatherManager {
     func parseJSON(_ weatherData: Data) -> WeatherModel? {
         let decoder = JSONDecoder()
         do {
-            let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
-            let id = decodedData.weather[0].id
-            let temp = decodedData.main.temp
-            let name = decodedData.name
-            let wind = decodedData.wind
+            let decodedData = try decoder.decode([String: WeatherData].self, from: weatherData)
+//            let id = decodedData.weather[0].id
+//            let temp = decodedData.main.temp
+//            let name = decodedData.name.components(separatedBy: " ").first ?? "Unknown"
+//            let wind = decodedData.wind
+//            let rain = decodedData.rain
             
-            let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
-            return weather
+            print("RAING: \(decodedData)")
+           // let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp, wind: wind)
+            return nil
             
         } catch {
             delegate?.didFailWithError(error: error)

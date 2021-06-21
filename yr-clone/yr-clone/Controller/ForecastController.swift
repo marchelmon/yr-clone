@@ -17,27 +17,43 @@ class ForecastController: UITableViewController {
     let locationManager = CLLocationManager()
     var weatherManager = WeatherManager()
     
+    
+    private lazy var headerView: UIView = {
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+        let button = UIButton(type: .system)
+        button.setTitle("Get weather", for: .normal)
+        button.addTarget(self, action: #selector(getLocationWeather), for: .touchUpInside)
+        button.setDimensions(width: 200, height: 50)
+        button.backgroundColor = .systemPink
+        button.setTitleColor(.white, for: .normal)
+        header.addSubview(button)
+        button.centerY(inView: header)
+        button.centerX(inView: header)
+        return header
+    }()
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         weatherManager.delegate = self
+        locationManager.delegate = self
+        
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.tableHeaderView = headerView
 
     }
     
-    //MARK: - API
+    //MARK: - Actions
     
-    func getCurrentWeather(withLocation: CLLocationCoordinate2D) {
-        
-        
-        
+    @objc func getLocationWeather() {
+        print("Get location")
     }
     
-    
-    //MARK: - Actions
     
 }
     
@@ -56,22 +72,16 @@ extension ForecastController: CLLocationManagerDelegate {
             print("DEFAULT location in switch")
         }
     }
-
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let coordinate = locations.first?.coordinate else { return }
         
         locationManager.stopUpdatingLocation()
         weatherManager.fetchWeather(withLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
-        
-//        location.fetchCityAndCountry { (city, country, error) in
-//
-//            guard let city = city else { return }
-//
-//            self.locationTapView.viewText.textColor = UIColor(white: 0.1, alpha: 0.9)
-//            self.locationTapView.viewText.text = city
-//
-//        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error in locationManager: \(error)")
     }
 }
     
@@ -83,6 +93,9 @@ extension ForecastController {
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
+    }
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Header \(section)"
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
@@ -98,7 +111,12 @@ extension ForecastController: WeatherManagerDelegate {
     }
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
-        print("The weather at my location is: \()")
-    }
+        print("WEATHER: \(weather)")
+        DispatchQueue.main.async {
+           // self.temperatureLabel.text = weather.temperatureString
+            //self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            //self.cityLabel.text = weather.cityName
+        }
+    }   
     
 }

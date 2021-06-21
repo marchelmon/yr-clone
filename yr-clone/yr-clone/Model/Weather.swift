@@ -13,6 +13,7 @@ struct WeatherModel {
     let conditionId: Int
     let cityName: String
     let temperature: Double
+    let wind: Wind
     
     var temperatureString: String {
         return String(format: "%.1f", temperature)
@@ -42,24 +43,27 @@ struct WeatherModel {
 
 //MARK: - WeahterData
 
-struct WeatherData: Codable {
-    let name: String
-    let main: Main
+struct WeatherData: Decodable {
+//    let name: String
+//    let main: Main
     let weather: [Weather]
-    let wind: Wind
+//    let wind: Wind
+//    let rain: Rain
+    //let dt_txt: String
 }
 
 struct Main: Codable {
     let temp: Double
 }
-
 struct Weather: Codable {
     let description: String
     let id: Int
 }
-
 struct Wind: Codable {
     let speed: Double
     let gust: Double
     let deg: Int
+}
+struct Rain: Codable {
+    let perThreeHours: Double
 }
