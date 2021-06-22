@@ -73,13 +73,25 @@ struct WeatherModel {
 
 //MARK: - WeahterData
 
+struct ForecastData: Decodable {
+    let list: [Forecast]
+}
+
+struct Forecast: Decodable {
+    let weather: [Weather]
+    let city: City
+    let main: Main
+    let wind: Wind
+    let rain: Rain?
+    let dt_txt: String
+}
+
 struct WeatherData: Decodable {
     let name: String
     let main: Main
     let weather: [Weather]
     let wind: Wind
     let rain: Rain?
-    let dt_txt: String?
 }
 
 struct Main: Codable {
@@ -91,7 +103,6 @@ struct Weather: Codable {
 }
 struct Wind: Codable {
     let speed: Double
-    let gust: Double
     let deg: Int
 }
 struct Rain: Codable {
@@ -102,6 +113,11 @@ struct Rain: Codable {
         case threeHour = "3h"
         case oneHour = "1h"
     }
+}
+struct City: Decodable {
+    let name: String
+    let sunrise: Int
+    let sunset: Int
 }
 
 

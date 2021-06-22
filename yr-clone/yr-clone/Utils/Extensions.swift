@@ -62,3 +62,39 @@ extension UIView {
     }
     
 }
+
+extension Calendar {
+    
+    func getStringFromDate(date: Date) -> String {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        
+        return "\(year)-\(month)-\(day)"
+        
+    }
+    
+}
+
+extension Date {
+    
+    func dateString() -> String {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: self)
+        let month = calendar.component(.month, from: self)
+        let day = calendar.component(.day, from: self)
+        
+        return "\(year)-\(month)-\(day)"
+    }
+    
+    func timeString() -> String {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: self)
+        let minute = calendar.component(.minute, from: self)
+        
+        return "\(hour):\(minute)"
+    }
+    
+    
+}

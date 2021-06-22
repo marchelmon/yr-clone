@@ -31,7 +31,13 @@ struct WeatherManager {
     }
     
     func fetchForecast(forCity city: String) {
-        
+        let urlString = "\(foreCastUrl)&q=\(city)"
+        performRequest(urlString: urlString)
+    }
+    
+    func fetchForecast(withLatitude lat: CLLocationDegrees, withLongitude lon: CLLocationDegrees) {
+        let urlString = "\(foreCastUrl)&lat=\(lat)&lon=\(lon)"
+        performRequest(urlString: urlString)
     }
     
     func performRequest(urlString: String) {
@@ -57,20 +63,74 @@ struct WeatherManager {
         do {
             let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
             let id = decodedData.weather[0].id
+            let name = decodedData.name
             let temp = decodedData.main.temp
-            let name = decodedData.name.components(separatedBy: " ").first ?? "Unknown"
             let wind = decodedData.wind
-            let date = decodedData.dt_txt?.components(separatedBy: " ")[0] ?? "00-00-0000"
-            let time = decodedData.dt_txt?.components(separatedBy: " ")[1] ?? "00:00"
+            let date = Date().dateString()
+            let timeString = Date().timeString()
+            
+            
+
             var rain = 0.0
             if let rainData = decodedData.rain {
                 rain = (rainData.oneHour != nil ? rainData.oneHour : rainData.threeHour) ?? 0.0
             }
-            return WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: date, time: time)
+            return WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: date, time: timeString)
             
         } catch {
             delegate?.didFailWithError(error: error)
             return nil
         }
     }
+    
+    
+    
+    func performRequests(urlString: String) {
+        if let url = URL(string: urlString) {
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: url) { (data, response, error) in
+                if error != nil {
+                    self.delegate?.didFailWithError(error: error!)
+                    return
+                }
+                if let safeData = data {
+                    if let weather = self.parseJSON(safeData) {
+                        self.delegate?.didUpdateWeather(self, weather: weather)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func parseForecastJSON(_ forecastData: Data) -> [WeatherModel]? {
+        let decoder = JSONDecoder()
+        do {
+            var forecasts = [WeatherModel]()
+            let decodedData = try decoder.decode(ForecastData.self, from: forecastData)
+            
+            decodedData.list.forEach { forecast in
+                let id = forecast.weather[0].id
+                let name = forecast.city.name
+                let temp = forecast.main.temp
+                let wind = forecast.wind
+                let date = forecast.dt_txt
+                let timeString = forecast.dt_txt
+                let rain = (forecast.rain?.threeHour ?? forecast.rain?.oneHour) ?? 0.0
+                
+                let forecast = WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: date, time: timeString)
+                forecasts.append(forecast)
+            }
+            return forecasts
+                        
+        } catch {
+            delegate?.didFailWithError(error: error)
+            return nil
+        }
+    }
+    
+    
+    
+    
+    
 }

@@ -77,7 +77,8 @@ extension ForecastController: CLLocationManagerDelegate {
         guard let coordinate = locations.first?.coordinate else { return }
         
         locationManager.stopUpdatingLocation()
-        weatherManager.fetchWeather(withLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
+        //weatherManager.fetchWeather(withLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
+        weatherManager.fetchForecast(withLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
