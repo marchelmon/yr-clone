@@ -75,11 +75,11 @@ struct WeatherModel {
 
 struct ForecastData: Decodable {
     let list: [Forecast]
+    let city: City
 }
 
 struct Forecast: Decodable {
     let weather: [Weather]
-    let city: City
     let main: Main
     let wind: Wind
     let rain: Rain?

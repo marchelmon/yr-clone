@@ -118,6 +118,9 @@ extension ForecastController: WeatherManagerDelegate {
             //self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             //self.cityLabel.text = weather.cityName
         }
-    }   
+    }
+    func didUpdateForecast(_ weatherManager: WeatherManager, forecast: [WeatherModel]) {
+        print("FORCAST: \(forecast.count)")
+    }
     
 }
