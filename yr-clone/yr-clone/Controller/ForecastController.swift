@@ -17,7 +17,7 @@ class ForecastController: UITableViewController {
     let locationManager = CLLocationManager()
     var weatherManager = WeatherManager()
     let forecastData = [WeatherModel]()
-    lazy var forecastDictionary: [Int: [WeatherModel]] = [0: forecastData]
+    lazy var forecastDictionary: [Int: [WeatherModel]] = [:]
 
     private lazy var headerView: UIView = {
         let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
@@ -61,19 +61,20 @@ class ForecastController: UITableViewController {
     func updateForecastDictionary(forecastData: [WeatherModel]) {
         DispatchQueue.main.async {
             var currentSection = 0
-            
             forecastData.forEach { forecast in
                 let hour = forecast.date.getHour()
-                if hour > 23 {
-                    currentSection += 1
+                if hour == 23 || hour == 21 || hour == 22 {
+                    if self.forecastDictionary[currentSection] != nil {
+                        currentSection += 1
+                    }
                     self.forecastDictionary[currentSection] = [WeatherModel]()
                 }
                 self.forecastDictionary[currentSection]?.append(forecast)
             }
             self.tableView.reloadData()
         }
+        
     }
-    
     
 }
     
@@ -123,7 +124,11 @@ extension ForecastController {
         guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
         let hour = forecast.date.getHour()
         let hourString = hour < 10 ? "0\(hour)" : "\(hour)"
-        let upcomingHourString = (hour + 3) < 10 ? "0\(hour + 3)" : "\(hour + 3)"
+        var upcomingHourString = (hour + 3) < 10 ? "0\(hour + 3)" : "\(hour + 3)"
+        if (hour + 3) > 24 {
+            upcomingHourString = "0\(hour - 21)"
+        }
+        
         cell.textLabel?.text = "\(hourString)-\(upcomingHourString)"
         return cell
     }
