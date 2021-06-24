@@ -11,10 +11,11 @@ import CoreLocation
 protocol WeatherManagerDelegate {
     func didFailWithError(error: Error)
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel)
-    func didUpdateForecast(_ weatherManager: WeatherManager, forecast: [WeatherModel])
+    func didUpdateForecast(_ weatherManager: WeatherManager, forecastData: [WeatherModel])
 }
 
 struct WeatherManager {
+    
     
     private let weatherUrl = "https://api.openweathermap.org/data/2.5/weather?appid=0ce0d5426849eda5b4f59f0540eb2789&units=metric"
     private let foreCastUrl = "https://api.openweathermap.org/data/2.5/forecast?appid=0ce0d5426849eda5b4f59f0540eb2789&units=metric"
@@ -67,16 +68,13 @@ struct WeatherManager {
             let name = decodedData.name
             let temp = decodedData.main.temp
             let wind = decodedData.wind
-            let date = Date().dateString()
-            let timeString = Date().timeString()
-            
-            
-
+            let currentDate = Date()
+            let dateHeader = currentDate.asString()
             var rain = 0.0
             if let rainData = decodedData.rain {
                 rain = (rainData.oneHour != nil ? rainData.oneHour : rainData.threeHour) ?? 0.0
             }
-            return WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: date, time: timeString)
+            return WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: currentDate, dateHeader: dateHeader)
             
         } catch {
             delegate?.didFailWithError(error: error)
@@ -96,7 +94,7 @@ struct WeatherManager {
                 }
                 if let safeData = data {
                     if let forecast = self.parseForecastJSON(safeData) {
-                        self.delegate?.didUpdateForecast(self, forecast: forecast)
+                        self.delegate?.didUpdateForecast(self, forecastData: forecast)
                     }
                 }
             }
@@ -109,17 +107,18 @@ struct WeatherManager {
         do {
             var forecasts = [WeatherModel]()
             let decodedData = try decoder.decode(ForecastData.self, from: forecastData)
-
+            
+                        
             let name = decodedData.city.name
             decodedData.list.forEach { forecast in
                 let id = forecast.weather[0].id
                 let temp = forecast.main.temp
                 let wind = forecast.wind
-                let date = forecast.dt_txt
-                let timeString = forecast.dt_txt
+                let date = (Date(timeIntervalSince1970: forecast.dt))
+                let dateHeader = date.asString()
                 let rain = (forecast.rain?.threeHour ?? forecast.rain?.oneHour) ?? 0.0
                 
-                let forecast = WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: date, time: timeString)
+                let forecast = WeatherModel(conditionId: id, cityName: name, temp: temp, wind: wind, rain: rain, date: date, dateHeader: dateHeader)
                 forecasts.append(forecast)
             }
             return forecasts

@@ -96,5 +96,21 @@ extension Date {
         return "\(hour):\(minute)"
     }
     
+    func getHour() -> Int {
+        return Calendar.current.component(.hour, from: self)
+    }
+    func getMinute() -> Int {
+        return Calendar.current.component(.minute, from: self)
+    }
+    
+    func asString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE dd MMMM"
+        let stringDate = dateFormatter.string(from: self)
+        
+        return stringDate
+    }
+    
+    
     
 }

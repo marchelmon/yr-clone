@@ -16,8 +16,9 @@ class ForecastController: UITableViewController {
     
     let locationManager = CLLocationManager()
     var weatherManager = WeatherManager()
-    
-    
+    let forecastData = [WeatherModel]()
+    lazy var forecastDictionary: [Int: [WeatherModel]] = [0: forecastData]
+
     private lazy var headerView: UIView = {
         let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
         let button = UIButton(type: .system)
@@ -51,7 +52,26 @@ class ForecastController: UITableViewController {
     //MARK: - Actions
     
     @objc func getLocationWeather() {
-        print("Get location")
+        locationManager.requestLocation()
+    }
+    
+    
+    //MARK: - Helpers
+    
+    func updateForecastDictionary(forecastData: [WeatherModel]) {
+        DispatchQueue.main.async {
+            var currentSection = 0
+            
+            forecastData.forEach { forecast in
+                let hour = forecast.date.getHour()
+                if hour == 0 || hour == 1 || hour == 2 || hour == 3 {
+                    currentSection += 1
+                    self.forecastDictionary[currentSection] = [WeatherModel]()
+                }
+                self.forecastDictionary[currentSection]?.append(forecast)
+            }
+            self.tableView.reloadData()
+        }
     }
     
     
@@ -90,18 +110,17 @@ extension ForecastController: CLLocationManagerDelegate {
 //MARK: - UITableViewDelegate and UITableViewDataSource
 extension ForecastController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return forecastDictionary.count
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return forecastDictionary[section]?.count ?? 0
     }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Header \(section)"
+        return forecastDictionary[section]?.first?.dateHeader ?? "No header found"
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        cell.textLabel?.text = ""
-        
+        cell.textLabel?.text = forecastDictionary[indexPath.section]?[indexPath.row].cityName
         return cell
     }
 }
@@ -119,8 +138,8 @@ extension ForecastController: WeatherManagerDelegate {
             //self.cityLabel.text = weather.cityName
         }
     }
-    func didUpdateForecast(_ weatherManager: WeatherManager, forecast: [WeatherModel]) {
-        print("FORCAST: \(forecast.count)")
+    func didUpdateForecast(_ weatherManager: WeatherManager, forecastData: [WeatherModel]) {
+        updateForecastDictionary(forecastData: forecastData)
     }
     
 }

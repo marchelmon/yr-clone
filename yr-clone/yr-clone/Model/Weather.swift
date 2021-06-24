@@ -15,8 +15,8 @@ struct WeatherModel {
     let temp: Double
     let wind: Wind
     let rain: Double
-    let date: String
-    let time: String
+    let date: Date
+    let dateHeader: String
     
     var tempString: String {
         return String(format: "%.1f", temp)
@@ -83,7 +83,7 @@ struct Forecast: Decodable {
     let main: Main
     let wind: Wind
     let rain: Rain?
-    let dt_txt: String
+    let dt: Double
 }
 
 struct WeatherData: Decodable {
