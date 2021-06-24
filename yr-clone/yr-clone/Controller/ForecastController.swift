@@ -44,7 +44,7 @@ class ForecastController: UITableViewController {
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(ForecastCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.tableHeaderView = headerView
 
     }
@@ -120,16 +120,9 @@ extension ForecastController {
         return forecastDictionary[section]?.first?.dateHeader ?? "No header found"
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ForecastCell
         guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
-        let hour = forecast.date.getHour()
-        let hourString = hour < 10 ? "0\(hour)" : "\(hour)"
-        var upcomingHourString = (hour + 3) < 10 ? "0\(hour + 3)" : "\(hour + 3)"
-        if (hour + 3) > 24 {
-            upcomingHourString = "0\(hour - 21)"
-        }
-        
-        cell.textLabel?.text = "\(hourString)-\(upcomingHourString)"
+        cell.weather = forecast
         return cell
     }
 }

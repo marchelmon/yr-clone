@@ -25,6 +25,7 @@
 		3C96A022267E025C00ECEE46 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96A021267E025C00ECEE46 /* DummyData.swift */; };
 		3C96A025267F539100ECEE46 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96A024267F539100ECEE46 /* Weather.swift */; };
 		3C96A02D267F599D00ECEE46 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96A02C267F599D00ECEE46 /* WeatherManager.swift */; };
+		3C96A03026851CAD00ECEE46 /* ForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96A02F26851CAD00ECEE46 /* ForecastCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		3C96A021267E025C00ECEE46 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		3C96A024267F539100ECEE46 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		3C96A02C267F599D00ECEE46 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		3C96A02F26851CAD00ECEE46 /* ForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				3C8C0E16267A54AC003E2B45 /* SettingsCell.swift */,
+				3C96A02F26851CAD00ECEE46 /* ForecastCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				3C8C0E14267A4CD2003E2B45 /* Service.swift in Sources */,
 				3C8C0E17267A54AC003E2B45 /* SettingsCell.swift in Sources */,
 				3C28D7BC267A293A005461D7 /* ViewController.swift in Sources */,
+				3C96A03026851CAD00ECEE46 /* ForecastCell.swift in Sources */,
 				3C96A025267F539100ECEE46 /* Weather.swift in Sources */,
 				3C28D7B8267A293A005461D7 /* AppDelegate.swift in Sources */,
 				3C8C0E1F267A6F27003E2B45 /* Extensions.swift in Sources */,

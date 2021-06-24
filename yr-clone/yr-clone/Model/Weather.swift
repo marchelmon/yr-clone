@@ -19,11 +19,15 @@ struct WeatherModel {
     let dateHeader: String
     
     var tempString: String {
-        return String(format: "%.1f", temp)
+        return "\(String(format: "%.1f", temp))ºC"
     }
     
     var rainString: String {
         return String(format: "%.1f", rain)
+    }
+    
+    var windString: String {
+        return String(format: "%.1f", wind.speed)
     }
     
     var conditionIcon: UIImage? {
