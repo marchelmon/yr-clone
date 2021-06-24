@@ -64,7 +64,7 @@ class ForecastController: UITableViewController {
             
             forecastData.forEach { forecast in
                 let hour = forecast.date.getHour()
-                if hour == 0 || hour == 1 || hour == 2 || hour == 3 {
+                if hour > 23 {
                     currentSection += 1
                     self.forecastDictionary[currentSection] = [WeatherModel]()
                 }
@@ -120,7 +120,11 @@ extension ForecastController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        cell.textLabel?.text = forecastDictionary[indexPath.section]?[indexPath.row].cityName
+        guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
+        let hour = forecast.date.getHour()
+        let hourString = hour < 10 ? "0\(hour)" : "\(hour)"
+        let upcomingHourString = (hour + 3) < 10 ? "0\(hour + 3)" : "\(hour + 3)"
+        cell.textLabel?.text = "\(hourString)-\(upcomingHourString)"
         return cell
     }
 }
