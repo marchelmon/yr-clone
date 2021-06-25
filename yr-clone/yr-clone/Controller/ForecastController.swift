@@ -19,19 +19,6 @@ class ForecastController: UITableViewController {
     let forecastData = [WeatherModel]()
     lazy var forecastDictionary: [Int: [WeatherModel]] = [:]
 
-//    private lazy var headerView: UIView = {
-//        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
-//        let button = UIButton(type: .system)
-//        button.setTitle("Get weather", for: .normal)
-//        button.addTarget(self, action: #selector(getLocationWeather), for: .touchUpInside)
-//        button.setDimensions(width: 200, height: 50)
-//        button.backgroundColor = .systemPink
-//        button.setTitleColor(.white, for: .normal)
-//        header.addSubview(button)
-//        button.centerY(inView: header)
-//        button.centerX(inView: header)
-//        return header
-//    }()
         
     //MARK: - Lifecycle
     
@@ -63,9 +50,8 @@ class ForecastController: UITableViewController {
             var currentSection = 0
             self.forecastDictionary[currentSection] = [WeatherModel]()
             forecastData.forEach { forecast in
-                print(forecast.dateHeader)
                 let hour = forecast.date.getHour()
-                if hour == 0 || hour == 1 || hour == 2 {
+                if (hour == 0 || hour == 1 || hour == 2) && self.forecastDictionary[0]?.count != 0 {
                     if self.forecastDictionary[currentSection] != nil {
                         currentSection += 1
                     }
@@ -113,10 +99,17 @@ extension ForecastController: CLLocationManagerDelegate {
 //MARK: - UITableViewDelegate and UITableViewDataSource
 extension ForecastController {
     override func numberOfSections(in tableView: UITableView) -> Int { return forecastDictionary.count }
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return 50 }
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return forecastDictionary[section]?.count ?? 0 }
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { return 35 }
-
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { return 30 }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.row == 0 ? 30 : 50
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let rows = forecastDictionary[section]?.count else { return 0 }
+        return rows + 1
+    }
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return forecastDictionary[section]?.first?.dateHeader ?? "No header found"
     }
@@ -125,13 +118,39 @@ extension ForecastController {
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = UIColor(white: 0.1, alpha: 0.9)
     }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 40))
+        footer.backgroundColor = .white
+        let bottomLine = UIView()
+        bottomLine.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
+        footer.addSubview(bottomLine)
+        bottomLine.anchor(left: footer.leftAnchor, bottom: footer.bottomAnchor, right: footer.rightAnchor, height: 4)
+        let sunLabel = UILabel()
+        sunLabel.text = forecastDictionary[section]?.first?.sunsetString
+        sunLabel.font = UIFont.systemFont(ofSize: 12)
+        sunLabel.textColor = .lightGray
+        footer.addSubview(sunLabel)
+        sunLabel.centerY(inView: footer)
+        sunLabel.centerX(inView: footer)
+        return footer
+        
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ForecastCell
-        guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
+        if indexPath.row == 0 {
+            cell.configureFirstRowCell()
+            return cell
+        }
+        guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row - 1] else { return cell }
         cell.weather = forecast
         return cell
     }
-    
 }
 
 extension ForecastController: WeatherManagerDelegate {
@@ -149,6 +168,9 @@ extension ForecastController: WeatherManagerDelegate {
     }
     func didUpdateForecast(_ weatherManager: WeatherManager, forecastData: [WeatherModel]) {
         updateForecastDictionary(forecastData: forecastData)
+        DispatchQueue.main.async {
+            self.navigationItem.title = forecastData[0].city.name
+        }
     }
     
 }

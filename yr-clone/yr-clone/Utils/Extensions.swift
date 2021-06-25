@@ -16,8 +16,8 @@ extension UIView {
                 right: NSLayoutXAxisAnchor? = nil,
                 paddingTop: CGFloat = 0,
                 paddingLeft: CGFloat = 0,
-                paddingtBottom: CGFloat = 0,
-                paddingtRight: CGFloat = 0,
+                paddingBottom: CGFloat = 0,
+                paddingRight: CGFloat = 0,
                 width: CGFloat? = nil,
                 height: CGFloat? = nil) {
 
@@ -30,10 +30,10 @@ extension UIView {
             leftAnchor.constraint(equalTo: left, constant: paddingLeft).isActive = true
         }
         if let bottom = bottom {
-            bottomAnchor.constraint(equalTo: bottom, constant: -paddingtBottom).isActive = true
+            bottomAnchor.constraint(equalTo: bottom, constant: -paddingBottom).isActive = true
         }
         if let right = right {
-            rightAnchor.constraint(equalTo: right, constant: -paddingtRight).isActive = true
+            rightAnchor.constraint(equalTo: right, constant: -paddingRight).isActive = true
         }
         if let width = width {
             widthAnchor.constraint(equalToConstant: width).isActive = true

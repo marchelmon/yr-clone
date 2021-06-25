@@ -12,14 +12,14 @@ import UIKit
 struct WeatherModel {
     let conditionId: Int
     let description: String
-    let cityName: String
+    let city: City
     let temp: Int
     let wind: Wind
     let rain: Double
     let date: Date
     let dateHeader: String
     
-    let imageConfig = UIImage.SymbolConfiguration(pointSize: 30)
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
     
     var tempString: String {
         return "\(temp)º"
@@ -31,6 +31,18 @@ struct WeatherModel {
     
     var windString: String {
         return String(format: "%.1f", wind.speed)
+    }
+    
+    var sunsetString: String {
+        let rise = Date(timeIntervalSince1970: city.sunrise)
+        let riseHour = rise.getHour() < 10 ? "0\(rise.getHour())" : "\(rise.getHour())"
+        let riseMinute = rise.getMinute() < 10 ? "0\(rise.getMinute())" : "\(rise.getMinute())"
+        
+        let set = Date(timeIntervalSince1970: city.sunset)
+        let setHour = set.getHour() < 10 ? "0\(set.getHour())" : "\(set.getHour())"
+        let setMinute = set.getMinute() < 10 ? "0\(set.getMinute())" : "\(set.getMinute())"
+        
+        return "Sunrise: \(riseHour):\(riseMinute)  -  Sunset: \(setHour):\(setMinute)"
     }
     
     var conditionIcon: UIImage? {
@@ -48,7 +60,7 @@ struct WeatherModel {
         case 701...781:
             return UIImage(systemName: "cloud.fog", withConfiguration: imageConfig)?.withTintColor(.gray)
         case 800:
-            return UIImage(systemName: "sun.max", withConfiguration: imageConfig)?.withTintColor(.systemYellow)
+            return UIImage(systemName: "sun.max.fill", withConfiguration: imageConfig)?.withTintColor(.systemYellow)
         case 801:
             return UIImage(systemName: "cloud.sun", withConfiguration: imageConfig)?.withTintColor(.gray)
         default:
@@ -101,6 +113,7 @@ struct WeatherData: Decodable {
     let weather: [Weather]
     let wind: Wind
     let rain: Rain?
+    let sys: Sys
 }
 
 struct Main: Codable {
@@ -125,8 +138,13 @@ struct Rain: Codable {
 }
 struct City: Decodable {
     let name: String
-    let sunrise: Int
-    let sunset: Int
+    let sunrise: Double
+    let sunset: Double
+}
+
+struct Sys: Decodable {
+    let sunrise: Double
+    let sunset: Double
 }
 
 

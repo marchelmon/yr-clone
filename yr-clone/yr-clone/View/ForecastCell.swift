@@ -28,7 +28,7 @@ class ForecastCell: UITableViewCell {
     let degreesLabel: UILabel = {
         let label = UILabel()
         label.textColor = #colorLiteral(red: 0.8075824873, green: 0.187832036, blue: 0.1575775297, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.text = "10ºC"
         return label
     }()
@@ -36,7 +36,7 @@ class ForecastCell: UITableViewCell {
     let rainLabel: UILabel = {
         let label = UILabel()
         label.textColor = .link
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
     
@@ -51,25 +51,54 @@ class ForecastCell: UITableViewCell {
     let weatherIcon = UIImageView()
     let windIcon = UIImageView()
     
+    private lazy var timeTopLabel = createFirstRowLabel()
+    private lazy var tempTopLabel = createFirstRowLabel()
+    private lazy var rainTopLabel = createFirstRowLabel()
+    private lazy var windTopLabel = createFirstRowLabel()
+    
+    
     //MARK: - Lifecycle
     
     
     //MARK: - Helpers
     
+    func configureFirstRowCell() {
+        selectionStyle = .none
+        separatorInset = .zero
+        emptyWeatherCell()
+            
+        timeTopLabel.text = "Time"
+        tempTopLabel.text = "Temp. ºC"
+        rainTopLabel.text = "Rain. mm"
+        windTopLabel.text = "Wind. m/s"
+        
+        addSubview(timeTopLabel)
+        timeTopLabel.anchor(left: leftAnchor, bottom: bottomAnchor, paddingLeft: 20, paddingBottom: 10)
+        
+        addSubview(tempTopLabel)
+        tempTopLabel.anchor(bottom: bottomAnchor, right: centerXAnchor, paddingBottom: 10, paddingRight: 20)
+        
+        addSubview(windTopLabel)
+        windTopLabel.anchor(bottom: bottomAnchor, right: rightAnchor, paddingBottom: 10, paddingRight: 15)
+        
+        addSubview(rainTopLabel)
+        rainTopLabel.anchor(left: centerXAnchor, bottom: bottomAnchor, paddingLeft: 30, paddingBottom: 10)
+    }
+    
     
     func configureCell() {
         selectionStyle = .none
+        separatorInset = .zero
         guard let weather = weather else { return }
+        
+        emptyFirstRowCell()
         
         if weatherIcon.image != nil { weatherIcon.image = nil }
         if windIcon.image != nil { windIcon.image = nil }
         
         weatherIcon.image = weather.conditionIcon?.withRenderingMode(.alwaysOriginal)
         windIcon.image = weather.windDirectionIcon?.withTintColor(UIColor(white: 0.1, alpha: 0.9)).withRenderingMode(.alwaysOriginal)
-        
-        //let weatherIcon = UIImageView(image: weather.conditionIcon?.withTintColor(.black).withRenderingMode(.alwaysOriginal))
-        //let windIcon = UIImageView(image: weather.windDirectionIcon?.withTintColor(.black).withRenderingMode(.alwaysOriginal))
-        
+                
         hoursLabel.text = getHourString(fromHour: weather.date.getHour())
         degreesLabel.text = weather.tempString
         if weather.rain != 0.0 { rainLabel.text = weather.rainString }
@@ -80,24 +109,43 @@ class ForecastCell: UITableViewCell {
         hoursLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
         hoursLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        contentView.addSubview(weatherIcon)
-        weatherIcon.centerY(inView: self, leftAnchor: hoursLabel.rightAnchor, paddingLeft: 20)
-        
         addSubview(degreesLabel)
-        degreesLabel.centerY(inView: self, leftAnchor: weatherIcon.rightAnchor, paddingLeft: 25)
+        degreesLabel.centerY(inView: self)
+        degreesLabel.anchor(right: centerXAnchor, paddingRight: 20)
+        
+        contentView.addSubview(weatherIcon)
+        weatherIcon.centerY(inView: self)
+        weatherIcon.anchor(right: degreesLabel.leftAnchor, paddingRight: 20)
+        
         
         contentView.addSubview(windIcon)
         windIcon.centerY(inView: self)
-        windIcon.anchor(right: rightAnchor, paddingtRight: 15)
+        windIcon.anchor(right: rightAnchor, paddingRight: 15)
         
         addSubview(windLabel)
         windLabel.centerY(inView: self)
-        windLabel.anchor(right: windIcon.leftAnchor, paddingtRight: 8)
+        windLabel.anchor(right: windIcon.leftAnchor, paddingRight: 8)
         
         addSubview(rainLabel)
         rainLabel.centerY(inView: self)
-        rainLabel.centerX(inView: self, constant: 60)
+        rainLabel.anchor(left: centerXAnchor, paddingLeft: 30)
         
+    }
+    
+    func emptyWeatherCell() {
+        weatherIcon.image = nil
+        windIcon.image = nil
+        hoursLabel.text = ""
+        degreesLabel.text = ""
+        windLabel.text = ""
+        rainLabel.text = ""
+    }
+    
+    func emptyFirstRowCell() {
+        timeTopLabel.text = ""
+        rainTopLabel.text = ""
+        tempTopLabel.text = ""
+        windTopLabel.text = ""
     }
     
     
@@ -112,6 +160,13 @@ class ForecastCell: UITableViewCell {
         }
         
         return "\(hourString)-\(upcomingHourString)"
+    }
+    
+    func createFirstRowLabel() -> UILabel {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .lightGray
+        return label
     }
     
 }

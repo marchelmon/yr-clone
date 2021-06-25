@@ -66,7 +66,7 @@ struct WeatherManager {
             let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
             let id = decodedData.weather[0].id
             let description = decodedData.weather[0].description
-            let name = decodedData.name
+            let city = City(name: decodedData.name, sunrise: decodedData.sys.sunrise, sunset: decodedData.sys.sunset)
             let temp = Int(decodedData.main.temp)
             let wind = decodedData.wind
             let currentDate = Date()
@@ -75,7 +75,7 @@ struct WeatherManager {
             if let rainData = decodedData.rain {
                 rain = (rainData.oneHour != nil ? rainData.oneHour : rainData.threeHour) ?? 0.0
             }
-            return WeatherModel(conditionId: id, description: description, cityName: name, temp: temp, wind: wind, rain: rain, date: currentDate, dateHeader: dateHeader)
+            return WeatherModel(conditionId: id, description: description, city: city, temp: temp, wind: wind, rain: rain, date: currentDate, dateHeader: dateHeader)
             
         } catch {
             delegate?.didFailWithError(error: error)
@@ -109,8 +109,7 @@ struct WeatherManager {
             var forecasts = [WeatherModel]()
             let decodedData = try decoder.decode(ForecastData.self, from: forecastData)
             
-                        
-            let name = decodedData.city.name
+            let city = decodedData.city
             decodedData.list.forEach { forecast in
                 let id = forecast.weather[0].id
                 let description = forecast.weather[0].description
@@ -120,7 +119,7 @@ struct WeatherManager {
                 let dateHeader = date.asString()
                 let rain = (forecast.rain?.threeHour ?? forecast.rain?.oneHour) ?? 0.0
                 
-                let forecast = WeatherModel(conditionId: id, description: description, cityName: name, temp: temp, wind: wind, rain: rain, date: date, dateHeader: dateHeader)
+                let forecast = WeatherModel(conditionId: id, description: description, city: city, temp: temp, wind: wind, rain: rain, date: date, dateHeader: dateHeader)
                 forecasts.append(forecast)
             }
             return forecasts

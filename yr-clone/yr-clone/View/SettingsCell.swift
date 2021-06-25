@@ -89,7 +89,7 @@ class SettingsCell: UITableViewCell {
     func addArrow() {
         addSubview(arrowIcon)
         arrowIcon.centerY(inView: self)
-        arrowIcon.anchor(right: rightAnchor, paddingtRight: 15)
+        arrowIcon.anchor(right: rightAnchor, paddingRight: 15)
     }
 
     func addOverline() {
