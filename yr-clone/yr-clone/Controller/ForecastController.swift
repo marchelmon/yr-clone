@@ -32,7 +32,7 @@ class ForecastController: UITableViewController {
         button.centerX(inView: header)
         return header
     }()
-    
+        
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -124,6 +124,10 @@ extension ForecastController {
         guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
         cell.weather = forecast
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
 }
 

@@ -27,8 +27,8 @@ class ForecastCell: UITableViewCell {
     
     let degreesLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .systemRed
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.textColor = #colorLiteral(red: 0.8075824873, green: 0.187832036, blue: 0.1575775297, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "10ºC"
         return label
     }()
@@ -37,62 +37,66 @@ class ForecastCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .link
         label.font = UIFont.systemFont(ofSize: 16)
-        label.text = "0.1mm"
         return label
     }()
     
     let windLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.text = "4 m/s"
+        label.textColor = UIColor(white: 0.1, alpha: 0.9)
         return label
     }()
     
-    let iconView: UIImageView = {
-        let iconView = UIImageView()
-        return iconView
-    }()
+    let weatherIcon = UIImageView()
+    let windIcon = UIImageView()
     
     //MARK: - Lifecycle
     
     
     //MARK: - Helpers
     
+    
     func configureCell() {
         selectionStyle = .none
-        
         guard let weather = weather else { return }
         
-        let weatherIcon = UIImageView(image: weather.conditionIcon)
-        let windIcon = UIImageView(image: weather.windDirectionIcon)
+        if weatherIcon.image != nil { weatherIcon.image = nil }
+        if windIcon.image != nil { windIcon.image = nil }
+        
+        weatherIcon.image = weather.conditionIcon?.withRenderingMode(.alwaysOriginal)
+        windIcon.image = weather.windDirectionIcon?.withTintColor(UIColor(white: 0.1, alpha: 0.9)).withRenderingMode(.alwaysOriginal)
+        
+        //let weatherIcon = UIImageView(image: weather.conditionIcon?.withTintColor(.black).withRenderingMode(.alwaysOriginal))
+        //let windIcon = UIImageView(image: weather.windDirectionIcon?.withTintColor(.black).withRenderingMode(.alwaysOriginal))
         
         hoursLabel.text = getHourString(fromHour: weather.date.getHour())
         degreesLabel.text = weather.tempString
-        rainLabel.text = weather.rainString
+        if weather.rain != 0.0 { rainLabel.text = weather.rainString }
         windLabel.text = weather.windString
 
         
         addSubview(hoursLabel)
         hoursLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
-        hoursLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        hoursLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        addSubview(weatherIcon)
+        contentView.addSubview(weatherIcon)
         weatherIcon.centerY(inView: self, leftAnchor: hoursLabel.rightAnchor, paddingLeft: 20)
         
         addSubview(degreesLabel)
-        degreesLabel.centerY(inView: self, leftAnchor: weatherIcon.rightAnchor, paddingLeft: 20)
+        degreesLabel.centerY(inView: self, leftAnchor: weatherIcon.rightAnchor, paddingLeft: 25)
         
-        addSubview(windIcon)
+        contentView.addSubview(windIcon)
         windIcon.centerY(inView: self)
         windIcon.anchor(right: rightAnchor, paddingtRight: 15)
         
         addSubview(windLabel)
         windLabel.centerY(inView: self)
-        windLabel.anchor(right: windIcon.leftAnchor, paddingLeft: 5)
+        windLabel.anchor(right: windIcon.leftAnchor, paddingtRight: 8)
         
         addSubview(rainLabel)
         rainLabel.centerY(inView: self)
-        rainLabel.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 60).isActive = true
+        rainLabel.centerX(inView: self, constant: 60)
         
     }
     

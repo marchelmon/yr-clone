@@ -11,19 +11,22 @@ import UIKit
 
 struct WeatherModel {
     let conditionId: Int
+    let description: String
     let cityName: String
-    let temp: Double
+    let temp: Int
     let wind: Wind
     let rain: Double
     let date: Date
     let dateHeader: String
     
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 30)
+    
     var tempString: String {
-        return "\(String(format: "%.1f", temp))ºC"
+        return "\(temp)º"
     }
     
     var rainString: String {
-        return String(format: "%.1f", rain)
+        return "\(String(format: "%.1f", rain))mm"
     }
     
     var windString: String {
@@ -33,25 +36,28 @@ struct WeatherModel {
     var conditionIcon: UIImage? {
         switch conditionId {
         case 200...232:
-            return UIImage(systemName: "cloud.bolt")
+            return UIImage(systemName: "cloud.bolt", withConfiguration: imageConfig)?.withTintColor(.gray)
         case 300...321:
-            return UIImage(systemName: "cloud.drizzle")
-        case 500...531:
-            return UIImage(systemName: "cloud.rain")
+            return UIImage(systemName: "cloud.drizzle", withConfiguration: imageConfig)?.withTintColor(.gray)
+        case 500...504:
+            return UIImage(systemName: "cloud.sun.rain", withConfiguration: imageConfig)?.withTintColor(.gray)
+        case 505...531:
+            return UIImage(systemName: "cloud.rain", withConfiguration: imageConfig)?.withTintColor(.gray)
         case 600...622:
-            return UIImage(systemName: "cloud.snow")
+            return UIImage(systemName: "cloud.snow", withConfiguration: imageConfig)?.withTintColor(.gray)
         case 701...781:
-            return UIImage(systemName: "cloud.fog")
+            return UIImage(systemName: "cloud.fog", withConfiguration: imageConfig)?.withTintColor(.gray)
         case 800:
-            return UIImage(systemName: "sun.max")
-        case 801...804:
-            return UIImage(systemName: "cloud.bolt")
+            return UIImage(systemName: "sun.max", withConfiguration: imageConfig)?.withTintColor(.systemYellow)
+        case 801:
+            return UIImage(systemName: "cloud.sun", withConfiguration: imageConfig)?.withTintColor(.gray)
         default:
-            return UIImage(systemName: "cloud")
+            return UIImage(systemName: "cloud", withConfiguration: imageConfig)?.withTintColor(.gray)
         }
     }
     
     var windDirectionIcon: UIImage? {
+        print(wind.deg)
         switch wind.deg {
         case 0...23, 338...360:
             return UIImage(systemName: "arrow.up")
