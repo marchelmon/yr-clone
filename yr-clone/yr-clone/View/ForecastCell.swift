@@ -77,7 +77,7 @@ class ForecastCell: UITableViewCell {
 
         
         addSubview(hoursLabel)
-        hoursLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
+        hoursLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
         hoursLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         contentView.addSubview(weatherIcon)

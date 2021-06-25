@@ -57,7 +57,6 @@ struct WeatherModel {
     }
     
     var windDirectionIcon: UIImage? {
-        print(wind.deg)
         switch wind.deg {
         case 0...23, 338...360:
             return UIImage(systemName: "arrow.up")

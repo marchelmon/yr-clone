@@ -19,19 +19,19 @@ class ForecastController: UITableViewController {
     let forecastData = [WeatherModel]()
     lazy var forecastDictionary: [Int: [WeatherModel]] = [:]
 
-    private lazy var headerView: UIView = {
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
-        let button = UIButton(type: .system)
-        button.setTitle("Get weather", for: .normal)
-        button.addTarget(self, action: #selector(getLocationWeather), for: .touchUpInside)
-        button.setDimensions(width: 200, height: 50)
-        button.backgroundColor = .systemPink
-        button.setTitleColor(.white, for: .normal)
-        header.addSubview(button)
-        button.centerY(inView: header)
-        button.centerX(inView: header)
-        return header
-    }()
+//    private lazy var headerView: UIView = {
+//        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+//        let button = UIButton(type: .system)
+//        button.setTitle("Get weather", for: .normal)
+//        button.addTarget(self, action: #selector(getLocationWeather), for: .touchUpInside)
+//        button.setDimensions(width: 200, height: 50)
+//        button.backgroundColor = .systemPink
+//        button.setTitleColor(.white, for: .normal)
+//        header.addSubview(button)
+//        button.centerY(inView: header)
+//        button.centerX(inView: header)
+//        return header
+//    }()
         
     //MARK: - Lifecycle
     
@@ -45,8 +45,11 @@ class ForecastController: UITableViewController {
         locationManager.requestLocation()
         
         tableView.register(ForecastCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.tableHeaderView = headerView
-
+        tableView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
+        
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
     }
     
     //MARK: - Actions
@@ -119,6 +122,14 @@ extension ForecastController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return forecastDictionary[section]?.first?.dateHeader ?? "No header found"
     }
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = .white
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = UIColor(white: 0.1, alpha: 0.9)
+    }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 34
+    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ForecastCell
         guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
@@ -127,7 +138,7 @@ extension ForecastController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 50
     }
 }
 
