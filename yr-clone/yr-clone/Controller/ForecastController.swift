@@ -46,10 +46,7 @@ class ForecastController: UITableViewController {
         
         tableView.register(ForecastCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
-        
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        
+
     }
     
     //MARK: - Actions
@@ -64,9 +61,11 @@ class ForecastController: UITableViewController {
     func updateForecastDictionary(forecastData: [WeatherModel]) {
         DispatchQueue.main.async {
             var currentSection = 0
+            self.forecastDictionary[currentSection] = [WeatherModel]()
             forecastData.forEach { forecast in
+                print(forecast.dateHeader)
                 let hour = forecast.date.getHour()
-                if hour == 23 || hour == 21 || hour == 22 {
+                if hour == 0 || hour == 1 || hour == 2 {
                     if self.forecastDictionary[currentSection] != nil {
                         currentSection += 1
                     }
@@ -113,12 +112,11 @@ extension ForecastController: CLLocationManagerDelegate {
     
 //MARK: - UITableViewDelegate and UITableViewDataSource
 extension ForecastController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return forecastDictionary.count
-    }
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return forecastDictionary[section]?.count ?? 0
-    }
+    override func numberOfSections(in tableView: UITableView) -> Int { return forecastDictionary.count }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return 50 }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return forecastDictionary[section]?.count ?? 0 }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { return 35 }
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return forecastDictionary[section]?.first?.dateHeader ?? "No header found"
     }
@@ -127,9 +125,6 @@ extension ForecastController {
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = UIColor(white: 0.1, alpha: 0.9)
     }
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 34
-    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ForecastCell
         guard let forecast = forecastDictionary[indexPath.section]?[indexPath.row] else { return cell }
@@ -137,9 +132,6 @@ extension ForecastController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
 }
 
 extension ForecastController: WeatherManagerDelegate {
