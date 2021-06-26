@@ -64,6 +64,11 @@ class ForecastController: UITableViewController {
         
     }
     
+    @IBAction func searchePressed(_ sender: UIBarButtonItem) {
+        let controller = SearchCityController()
+        present(controller, animated: true, completion: nil)
+    }
+    
 }
     
 extension ForecastController: CLLocationManagerDelegate {

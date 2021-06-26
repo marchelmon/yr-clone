@@ -91,20 +91,16 @@
                             <outlet property="delegate" destination="3rM-83-GQY" id="Om3-RD-07k"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem systemItem="search" id="T7Z-Ua-zFM">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </barButtonItem>
-                        <barButtonItem systemItem="search" id="6S1-xb-I1D">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Current Location" id="J3r-az-u4l">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="star" catalog="system" id="nA3-F2-xrt">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="F4k-lj-nbR">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="searchePressed:" destination="3rM-83-GQY" id="mjx-Bn-3Mj"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
