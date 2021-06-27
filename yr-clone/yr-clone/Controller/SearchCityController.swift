@@ -10,8 +10,10 @@ import UIKit
 class SearchCityController: UITableViewController {
     
     //MARK: - Properties
-
     
+    var searchResults = [String]()
+    var isEditingSearch = false
+
     let topLabel: UILabel = {
         let label = UILabel()
         label.text = "My locations"
@@ -36,6 +38,8 @@ class SearchCityController: UITableViewController {
         
         let searchBar = UISearchBar()
         searchBar.backgroundImage = UIImage()
+        searchBar.delegate = self
+        
         header.addSubview(searchBar)
         searchBar.centerY(inView: header, leftAnchor: header.leftAnchor, paddingLeft: 20, constant: 20)
         searchBar.anchor(right: header.rightAnchor, paddingRight: 20)
@@ -53,12 +57,12 @@ class SearchCityController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         view.backgroundColor = .white
         tableView.tableHeaderView = tableHeader
         
+        
     }
-    
     
     //MARK: - Actions
     
@@ -72,12 +76,44 @@ class SearchCityController: UITableViewController {
 }
 
 
-
-
 //MARK: - TableViewDelegate and DataSource
 
 extension SearchCityController {
-    override func numberOfSections(in tableView: UITableView) -> Int { return 1 }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var row = 0
+        if isEditingSearch {
+            row = searchResults.count > 0 ? searchResults.count : 1
+        } else {
+            //row = antal tillagda favorites
+        }
+        return row
+    }
     
+    
+    
+    
+}
+
+
+//MARK: - UISearchBarDelegate
+
+extension SearchCityController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        isEditingSearch = false
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        isEditingSearch = true
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("Text did change: \(searchText)")
+    }
     
 }

@@ -120,12 +120,12 @@
 		3C28D7CE267A3107005461D7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3C28D7CF267A312E005461D7 /* SettingsController.swift */,
 				3C28D7D3267A3164005461D7 /* WeatherMapController.swift */,
 				3C28D7D6267A3184005461D7 /* ForecastController.swift */,
 				3C28D7D9267A3785005461D7 /* FavoritesController.swift */,
 				3C96A01B267B31A900ECEE46 /* SetSettingController.swift */,
 				3C96A03726875E8A00ECEE46 /* SearchCityController.swift */,
+				3C28D7CF267A312E005461D7 /* SettingsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

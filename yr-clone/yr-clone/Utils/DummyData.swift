@@ -12,6 +12,8 @@ class Dummy {
     
     static let shared = Dummy()
     
+    let randomCities = ["London", "New York", "Gothenbur", "Stockholm", "Copenhagen", "Washington", "Malmö", "Oslo", "Helsinki", "Berlin", "Amsterdam", "Rome", "Madrid", "Barcelona", "Malaga", "Milano", "Gdansk", "Moskow", "Sydney", "Toronto"]
+    
     let settingRows: [SettingsRow]
     
     let startData = ["Table", "Sky", "Graph"]
