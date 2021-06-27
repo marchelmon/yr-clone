@@ -6,10 +6,19 @@
 //
 
 import UIKit
+import CoreLocation
+
+private let currentLocationCell = "CurrentCell"
+private let resultCell = "ResultCell"
 
 class SearchCityController: UITableViewController {
     
     //MARK: - Properties
+    
+    let locationManager = CLLocationManager()
+    var weatherManager = WeatherManager()
+    
+    var currentLocationWeather: WeatherModel?
     
     var searchResults = [String]()
     var isEditingSearch = false
@@ -57,10 +66,18 @@ class SearchCityController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
         view.backgroundColor = .white
-        tableView.tableHeaderView = tableHeader
         
+        locationManager.delegate = self
+        weatherManager.delegate = self
+        
+        tableView.tableHeaderView = tableHeader
+        tableView.separatorStyle = .none
+        tableView.register(LocationCell.self, forCellReuseIdentifier: currentLocationCell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: resultCell)
+        
+        guard let currentLocation = Service.shared.currentLocation else { return }
+        weatherManager.fetchWeather(withLatitude: currentLocation.latitude, withLongitude: currentLocation.longitude)
         
     }
     
@@ -79,27 +96,63 @@ class SearchCityController: UITableViewController {
 //MARK: - TableViewDelegate and DataSource
 
 extension SearchCityController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    override func numberOfSections(in tableView: UITableView) -> Int { return 2 }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return section == 0 ? searchResults.count : 1 }
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? { return section == 1 ? "Current location" : nil }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return indexPath.section == 0 ? 40 : 80 }
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = .white
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = UIColor(white: 0.1, alpha: 0.8)
     }
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var row = 0
-        if isEditingSearch {
-            row = searchResults.count > 0 ? searchResults.count : 1
-        } else {
-            //row = antal tillagda favorites
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: currentLocationCell) as! LocationCell
+            cell.weather = currentLocationWeather
+            return cell
         }
-        return row
+        let cell = tableView.dequeueReusableCell(withIdentifier: resultCell, for: indexPath)
+        cell.textLabel?.text = searchResults[indexPath.row]
+        return cell
     }
     
-    
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("Current Weather: \(currentLocationWeather)")
+        print("pressed row")
+        if indexPath.section == 0 {
+            print("Delegate goes back to forecast")
+        }
+        if indexPath.section == 1 {
+            if currentLocationWeather == nil {
+                getUserLocation()
+            }
+        }
+    }
     
 }
 
+//MARK: - WeatherManagerDelegate
+extension SearchCityController: WeatherManagerDelegate {
+    func didFailWithError(error: Error) {
+        print("Fetch Weather error: \(error.localizedDescription)")
+    }
+    
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        currentLocationWeather = weather
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func didUpdateForecast(_ weatherManager: WeatherManager, forecastData: [WeatherModel]) {
+        print("Updated forecst in searchcitycontroller")
+    }
+}
 
 //MARK: - UISearchBarDelegate
-
 extension SearchCityController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
@@ -116,4 +169,30 @@ extension SearchCityController: UISearchBarDelegate {
         print("Text did change: \(searchText)")
     }
     
+}
+
+
+
+
+
+
+//MARK: - CLLocationManagerDelegate
+extension SearchCityController: CLLocationManagerDelegate {
+    func getUserLocation() {
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined: locationManager.requestWhenInUseAuthorization()
+        case .restricted, .denied: locationManager.requestWhenInUseAuthorization()
+        case .authorizedAlways: locationManager.startUpdatingLocation()
+        case .authorizedWhenInUse: locationManager.startUpdatingLocation()
+        @unknown default: print("Get location bull") }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let coordinate = locations.first?.coordinate else { return }
+        Service.shared.currentLocation = coordinate
+
+        weatherManager.fetchWeather(withLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
+
+        locationManager.stopUpdatingLocation()
+    }
 }

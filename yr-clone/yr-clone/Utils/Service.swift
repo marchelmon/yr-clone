@@ -12,6 +12,8 @@ class Service {
     
     static let shared = Service()
     
+    var currentLocation: CLLocationCoordinate2D?
+    
     func getSettingData(fromType type: SettingType) -> [String] {
         switch type {
         case .start: return Dummy.shared.startData

@@ -27,21 +27,14 @@ class ForecastController: UITableViewController {
 
         weatherManager.delegate = self
         locationManager.delegate = self
-        
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
-        
+                
         tableView.register(ForecastCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
 
+        getUserLocation()
+        
     }
-    
-    //MARK: - Actions
-    
-    @objc func getLocationWeather() {
-        locationManager.requestLocation()
-    }
-    
+
     
     //MARK: - Helpers
     
@@ -66,7 +59,7 @@ class ForecastController: UITableViewController {
     
     @IBAction func searchePressed(_ sender: UIBarButtonItem) {
         let controller = SearchCityController()
-        present(controller, animated: true, completion: nil)
+        navigationController?.pushViewController(controller, animated: true)
     }
     
 }
@@ -74,21 +67,17 @@ class ForecastController: UITableViewController {
 extension ForecastController: CLLocationManagerDelegate {
     func getUserLocation() {
         switch CLLocationManager.authorizationStatus() {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .restricted, .denied:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedAlways:
-            locationManager.startUpdatingLocation()
-        case .authorizedWhenInUse:
-            locationManager.startUpdatingLocation()
-        @unknown default:
-            print("DEFAULT location in switch")
-        }
+        case .notDetermined: locationManager.requestWhenInUseAuthorization()
+        case .restricted, .denied: locationManager.requestWhenInUseAuthorization()
+        case .authorizedAlways: locationManager.startUpdatingLocation()
+        case .authorizedWhenInUse: locationManager.startUpdatingLocation()
+        @unknown default: print("Get location bull") }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let coordinate = locations.first?.coordinate else { return }
+        
+        Service.shared.currentLocation = coordinate
         
         locationManager.stopUpdatingLocation()
         //weatherManager.fetchWeather(withLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
