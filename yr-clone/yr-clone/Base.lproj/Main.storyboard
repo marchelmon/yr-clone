@@ -95,6 +95,9 @@
                     <navigationItem key="navigationItem" title="Current Location" id="J3r-az-u4l">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="star" catalog="system" id="nA3-F2-xrt">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="starPressed:" destination="3rM-83-GQY" id="6HO-gr-fNt"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="F4k-lj-nbR">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -155,6 +158,9 @@
                     <navigationItem key="navigationItem" title="Current location" id="Acc-yb-dqa">
                         <barButtonItem key="leftBarButtonItem" image="star" catalog="system" id="yzs-Bv-cfr">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="pressedStar:" destination="gO4-NZ-RZN" id="mVZ-o3-72A"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="xNk-zS-mn7">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

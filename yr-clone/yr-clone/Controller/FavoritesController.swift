@@ -20,6 +20,15 @@ class FavoritesController: UITableViewController {
         
         view.backgroundColor = .red
         
+        navigationItem.title = Service.shared.lastForecast?.city.name ?? "Nomansland"
+        
     }
     
+    //MARK: - Actions
+    @IBAction func pressedStar(_ sender: UIBarButtonItem) {
+        
+    }
 }
+
+
+m

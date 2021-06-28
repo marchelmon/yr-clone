@@ -33,10 +33,46 @@ class ForecastController: UITableViewController {
 
         getUserLocation()
         
-    }
+        
 
+        
+    }
+    
+    
+    //MARK: - Actions
+    
+    @IBAction func starPressed(_ sender: UIBarButtonItem) {
+        guard forecastDictionary[0]?.count != 0 else { return }
+        
+        guard let lastForecast = Service.shared.lastForecast else { return }
+        if cityIsFavorite(city: lastForecast.city.name) {
+            let index = Service.shared.favoriteLocations.firstIndex { favorite -> Bool in
+                return favorite.city.name == lastForecast.city.name ? true : false
+            }
+            if index == nil { return }
+            Service.shared.favoriteLocations.remove(at: index!)
+            navigationItem.leftBarButtonItem?.image = UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(.lightGray)
+        } else {
+            Service.shared.favoriteLocations.append(lastForecast)
+            navigationItem.leftBarButtonItem?.image = UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.link)
+        }
+    }
+    
+    @IBAction func searchePressed(_ sender: UIBarButtonItem) {
+        let controller = SearchCityController()
+        controller.delegate = self
+        navigationController?.pushViewController(controller, animated: true)
+    }
     
     //MARK: - Helpers
+    
+    
+    func cityIsFavorite(city: String) -> Bool {
+        let index = Service.shared.favoriteLocations.firstIndex(where: { weather -> Bool in
+            return weather.city.name == city ? true : false
+        })
+        return index != nil ? true: false
+    }
     
     func updateForecastDictionary(forecastData: [WeatherModel]) {
         DispatchQueue.main.async {
@@ -55,12 +91,6 @@ class ForecastController: UITableViewController {
             self.tableView.reloadData()
         }
         
-    }
-    
-    @IBAction func searchePressed(_ sender: UIBarButtonItem) {
-        let controller = SearchCityController()
-        controller.delegate = self
-        navigationController?.pushViewController(controller, animated: true)
     }
     
 }
@@ -154,7 +184,6 @@ extension ForecastController: WeatherManagerDelegate {
     }
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
-        print("WEATHER: \(weather)")
         DispatchQueue.main.async {
            // self.temperatureLabel.text = weather.temperatureString
             //self.conditionImageView.image = UIImage(systemName: weather.conditionName)
@@ -166,6 +195,7 @@ extension ForecastController: WeatherManagerDelegate {
         DispatchQueue.main.async {
             self.navigationItem.title = forecastData[0].city.name
             self.navigationController?.popToViewController(self, animated: true)
+            Service.shared.lastForecast = forecastData.first
         }
     }
     

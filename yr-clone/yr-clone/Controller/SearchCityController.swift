@@ -42,7 +42,7 @@ class SearchCityController: UITableViewController {
     }()
     
     private lazy var tableHeader: UIView = {
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100))
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 140))
         
         let searchBar = UISearchBar()
         searchBar.backgroundImage = UIImage()
@@ -77,6 +77,7 @@ class SearchCityController: UITableViewController {
         guard let currentLocation = Service.shared.currentLocation else { return }
         weatherManager.fetchWeather(withLatitude: currentLocation.latitude, withLongitude: currentLocation.longitude)
         
+        
     }
     
     //MARK: - Actions
@@ -93,11 +94,6 @@ extension SearchCityController {
     override func numberOfSections(in tableView: UITableView) -> Int { return 2 }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return section == 0 ? searchResults.count : 1 }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return indexPath.section == 0 ? 50 : 80 }
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        view.tintColor = .white
-        let header = view as! UITableViewHeaderFooterView
-        header.textLabel?.textColor = UIColor(white: 0.1, alpha: 0.8)
-    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 1 {
@@ -177,8 +173,6 @@ extension SearchCityController: UISearchBarDelegate {
     }
     
 }
-
-
 
 
 

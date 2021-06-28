@@ -14,6 +14,9 @@ class Service {
     
     var currentLocation: CLLocationCoordinate2D?
     
+    var lastForecast: WeatherModel?
+    var favoriteLocations = [WeatherModel]()
+    
     func getSettingData(fromType type: SettingType) -> [String] {
         switch type {
         case .start: return Dummy.shared.startData
