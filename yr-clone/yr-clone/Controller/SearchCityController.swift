@@ -37,18 +37,10 @@ class SearchCityController: UITableViewController {
     
     private lazy var tableHeader: UIView = {
         let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100))
-
-        let closeButton = UIButton(type: .system)
-        let closeIcon = UIImage(systemName: "xmark")?.withRenderingMode(.alwaysOriginal).withTintColor(.gray)
-        closeButton.setImage(closeIcon, for: .normal)
-        closeButton.addTarget(self, action: #selector(dismissController), for: .touchUpInside)
-        header.addSubview(closeButton)
-        closeButton.anchor(top: header.topAnchor, right: header.rightAnchor, paddingTop: 15, paddingRight: 15)
         
         let searchBar = UISearchBar()
         searchBar.backgroundImage = UIImage()
         searchBar.delegate = self
-        
         header.addSubview(searchBar)
         searchBar.centerY(inView: header, leftAnchor: header.leftAnchor, paddingLeft: 20, constant: 20)
         searchBar.anchor(right: header.rightAnchor, paddingRight: 20)
@@ -83,10 +75,6 @@ class SearchCityController: UITableViewController {
     
     //MARK: - Actions
     
-    @objc func dismissController() {
-        dismiss(animated: true, completion: nil)
-    }
-    
     
     //MARK: - Helpers
     
@@ -119,15 +107,11 @@ extension SearchCityController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        print("Current Weather: \(currentLocationWeather)")
-        print("pressed row")
         if indexPath.section == 0 {
             print("Delegate goes back to forecast")
         }
         if indexPath.section == 1 {
-            if currentLocationWeather == nil {
-                getUserLocation()
-            }
+            getUserLocation()
         }
     }
     
