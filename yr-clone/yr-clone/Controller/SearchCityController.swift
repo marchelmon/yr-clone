@@ -11,9 +11,15 @@ import CoreLocation
 private let currentLocationCell = "CurrentCell"
 private let resultCell = "ResultCell"
 
+protocol SearchCityDelegate: class {
+    func didSelectCity(city: String)
+}
+
 class SearchCityController: UITableViewController {
     
     //MARK: - Properties
+    
+    var delegate: SearchCityDelegate?
     
     let locationManager = CLLocationManager()
     var weatherManager = WeatherManager()
@@ -86,8 +92,7 @@ class SearchCityController: UITableViewController {
 extension SearchCityController {
     override func numberOfSections(in tableView: UITableView) -> Int { return 2 }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return section == 0 ? searchResults.count : 1 }
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? { return section == 1 ? "Current location" : nil }
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return indexPath.section == 0 ? 40 : 80 }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return indexPath.section == 0 ? 50 : 80 }
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = .white
         let header = view as! UITableViewHeaderFooterView
@@ -108,13 +113,20 @@ extension SearchCityController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
-            print("Delegate goes back to forecast")
+            delegate?.didSelectCity(city: searchResults[indexPath.row])
         }
         if indexPath.section == 1 {
-            getUserLocation()
+            let cell = tableView.cellForRow(at: indexPath) as! LocationCell
+            if let cityName = cell.weather?.city.name {
+                delegate?.didSelectCity(city: cityName)
+            } else {
+                getUserLocation()
+            }
         }
     }
-    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        view.endEditing(true)
+    }
 }
 
 //MARK: - WeatherManagerDelegate
@@ -138,6 +150,7 @@ extension SearchCityController: WeatherManagerDelegate {
 
 //MARK: - UISearchBarDelegate
 extension SearchCityController: UISearchBarDelegate {
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
     }
@@ -150,7 +163,17 @@ extension SearchCityController: UISearchBarDelegate {
         isEditingSearch = true
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("Text did change: \(searchText)")
+        searchResults = []
+        guard searchText.count > 2 else { return }
+        let text = searchText.lowercased()
+        
+        Dummy.shared.randomCities.forEach { city in
+            let cityLowercased = city.lowercased()
+            if cityLowercased.range(of: text) != nil {
+                searchResults.append(city)
+            }
+        }
+        tableView.reloadData()
     }
     
 }

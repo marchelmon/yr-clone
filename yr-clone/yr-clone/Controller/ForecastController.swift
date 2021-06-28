@@ -59,6 +59,7 @@ class ForecastController: UITableViewController {
     
     @IBAction func searchePressed(_ sender: UIBarButtonItem) {
         let controller = SearchCityController()
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -164,7 +165,21 @@ extension ForecastController: WeatherManagerDelegate {
         updateForecastDictionary(forecastData: forecastData)
         DispatchQueue.main.async {
             self.navigationItem.title = forecastData[0].city.name
+            self.navigationController?.popToViewController(self, animated: true)
         }
     }
     
+}
+
+
+//MARK: - SearchCityDelegate
+extension ForecastController: SearchCityDelegate {
+    
+    func didSelectCity(city: String) {
+        var cityString = ""
+        for char in city {
+            cityString.append(char == " " ? "+" : char)
+        }
+        weatherManager.fetchForecast(forCity: cityString)
+    }
 }
