@@ -13,29 +13,79 @@ class FavoritesController: UITableViewController {
     
     //MARK: - Properties
     
+    var weatherManager = WeatherManager()
     
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        
         navigationItem.title = Service.shared.lastForecast?.city.name ?? "Nomansland"
         
-        tableView.register(LocationCell.self, forCellReuseIdentifier: favoriteCell)
+        tableView.register(FavoriteCell.self, forCellReuseIdentifier: favoriteCell)
+        
+        weatherManager.delegate = self
         
     }
     
-    //MARK: - Actions
-    @IBAction func pressedStar(_ sender: UIBarButtonItem) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+        tableView.reloadData()
     }
-}
+    
 
+    //MARK: - Actions
+    
+    @IBAction func addNewFavorite(_ sender: UIBarButtonItem) {
+        let controller = SearchCityController()
+        controller.delegate = self
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+}
 
 //MARK: - UITableViewDelegate / UITableViewDataSource
 extension FavoritesController {
     override func numberOfSections(in tableView: UITableView) -> Int { return 1 }
-    //override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? { return "" }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return Service.shared.favoriteLocations.count }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { return 70 }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: favoriteCell) as! FavoriteCell
+        
+        cell.weather = Service.shared.favoriteLocations[indexPath.row]
+        
+        return cell
+    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        tabBarController?.selectedIndex = 0
+    }
+    
+}
+
+//MARK: - SearchCityDelegate
+
+extension FavoritesController: SearchCityDelegate {
+    func didSelectCity(city: String) {
+        weatherManager.fetchWeather(forCity: city)
+    }
+}
+
+
+//MARK: - WeatherManagerDelegate
+extension FavoritesController: WeatherManagerDelegate {
+    func didFailWithError(error: Error) { print("Error: \(error.localizedDescription)") }
+    func didUpdateForecast(_ weatherManager: WeatherManager, forecastData: [WeatherModel]) { print("Did update forecast") }
+    
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        Service.shared.favoriteLocations.append(weather)
+        DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
+            self.tableView.reloadData()
+        }
+    }
+    
 }

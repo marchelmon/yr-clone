@@ -42,14 +42,10 @@ class ForecastController: UITableViewController {
     //MARK: - Actions
     
     @IBAction func starPressed(_ sender: UIBarButtonItem) {
-        guard forecastDictionary[0]?.count != 0 else { return }
-        
         guard let lastForecast = Service.shared.lastForecast else { return }
-        if cityIsFavorite(city: lastForecast.city.name) {
-            let index = Service.shared.favoriteLocations.firstIndex { favorite -> Bool in
-                return favorite.city.name == lastForecast.city.name ? true : false
-            }
-            if index == nil { return }
+
+        let (isFavorite, index) = cityIsFavorite(city: lastForecast.city.name)
+        if isFavorite {
             Service.shared.favoriteLocations.remove(at: index!)
             navigationItem.leftBarButtonItem?.image = UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(.lightGray)
         } else {
@@ -58,20 +54,19 @@ class ForecastController: UITableViewController {
         }
     }
     
-    @IBAction func searchePressed(_ sender: UIBarButtonItem) {
+    @IBAction func searchPressed(_ sender: UIBarButtonItem) {
         let controller = SearchCityController()
         controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
     }
     
     //MARK: - Helpers
-    
-    
-    func cityIsFavorite(city: String) -> Bool {
+
+    func cityIsFavorite(city: String) -> (Bool, Int?) {
         let index = Service.shared.favoriteLocations.firstIndex(where: { weather -> Bool in
             return weather.city.name == city ? true : false
         })
-        return index != nil ? true: false
+        return index != nil ? (true, index): (false, nil)
     }
     
     func updateForecastDictionary(forecastData: [WeatherModel]) {

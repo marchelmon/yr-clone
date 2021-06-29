@@ -19,7 +19,7 @@ class ForecastCell: UITableViewCell {
     
     let hoursLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .lightGray
+        label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 14)
         label.text = "0000"
         return label
@@ -165,7 +165,7 @@ class ForecastCell: UITableViewCell {
     func createFirstRowLabel() -> UILabel {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .lightGray
+        label.textColor = .gray
         return label
     }
     

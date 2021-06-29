@@ -15,14 +15,14 @@ class FavoriteCell: UITableViewCell {
     var weather: WeatherModel? {
         didSet {
             guard weather != nil else { return }
-            configureWeatherCell()
+            configureCell()
         }
     }
 
     let locationLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(white: 0.1, alpha: 0.8)
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "Bermuda"
         return label
     }()
@@ -42,35 +42,48 @@ class FavoriteCell: UITableViewCell {
     
     lazy var starIcon: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(fillStarImage, for: .normal)
+        button.addTarget(self, action: #selector(pressedStar), for: .touchUpInside)
         return button
     }()
     
-
-    //MARK: - Lifecycle
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        addSeparators()
+    
+    //MARK: - Actions
+    
+    @objc func pressedStar() {
+        starIcon.imageView?.image = nil
+        print("Pressed star")
+        let index = Service.shared.favoriteLocations.firstIndex { favorite -> Bool in
+            return favorite.city.name == weather?.city.name
+        }
+        if index != nil {
+            Service.shared.favoriteLocations.remove(at: index!)
+            starIcon.setImage(starImage, for: .normal)
+        } else {
+            Service.shared.favoriteLocations.append(weather!)
+            starIcon.setImage(fillStarImage, for: .normal)
+        }
     }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func configureWeatherCell() {
+    
+    func configureCell() {
         guard let weather = weather else { return }
         
-        let imgConfig = UIImage.SymbolConfiguration(pointSize: 35)
+        let index = Service.shared.favoriteLocations.firstIndex(where: { favorite -> Bool in
+            return favorite.city.name == weather.city.name
+        })
+        let currentStarImage = index == nil ? starImage : fillStarImage
+        starIcon.setImage(currentStarImage, for: .normal)
+        
+        let imgConfig = UIImage.SymbolConfiguration(pointSize: 30)
         weatherIcon.image = weather.conditionIcon?.withRenderingMode(.alwaysOriginal).withConfiguration(imgConfig)
                 
         locationLabel.text = weather.city.name
         degreesLabel.text = weather.tempString
         
-        addSubview(locationLabel)
-        locationLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
-
+        contentView.addSubview(starIcon)
+        starIcon.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
         
+        addSubview(locationLabel)
+        locationLabel.centerY(inView: self, leftAnchor: starIcon.rightAnchor, paddingLeft: 10)
         
         addSubview(weatherIcon)
         weatherIcon.centerY(inView: self)
@@ -79,32 +92,6 @@ class FavoriteCell: UITableViewCell {
         addSubview(degreesLabel)
         degreesLabel.centerY(inView: self)
         degreesLabel.anchor(right: weatherIcon.leftAnchor, paddingRight: 5)
-        
-    }
-
-    func addSeparators() {
-        
-        let overLine = UIView()
-        let underLine = UIView()
-        
-        overLine.backgroundColor = .lightGray
-        underLine.backgroundColor = .lightGray
-        
-        addSubview(overLine)
-        overLine.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 1)
-        
-        addSubview(underLine)
-        underLine.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
-    }
-    
-    func pressedStart(wasAddedToFavorites: Bool) {
-        starIcon.imageView?.image = nil
-        starIcon.imageView?.image = wasAddedToFavorites ? fillStarImage : starImage
-//        if wasAddedToFavorites {
-//            starIcon.setImage(fillStarImage, for: .normal)
-//        } else {
-//            starIcon.setImage(starImage, for: .normal)
-//        }
     }
     
 }

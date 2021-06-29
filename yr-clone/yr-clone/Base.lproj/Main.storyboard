@@ -102,7 +102,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="F4k-lj-nbR">
                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
-                                <action selector="searchePressed:" destination="3rM-83-GQY" id="mjx-Bn-3Mj"/>
+                                <action selector="searchPressed:" destination="3rM-83-GQY" id="mjx-Bn-3Mj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -156,14 +156,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Current location" id="Acc-yb-dqa">
-                        <barButtonItem key="leftBarButtonItem" image="star" catalog="system" id="yzs-Bv-cfr">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="xNk-zS-mn7">
+                            <color key="tintColor" systemColor="linkColor"/>
                             <connections>
-                                <action selector="pressedStar:" destination="gO4-NZ-RZN" id="mVZ-o3-72A"/>
+                                <action selector="addNewFavorite:" destination="gO4-NZ-RZN" id="MUG-t2-rZ3"/>
                             </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="xNk-zS-mn7">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
@@ -242,6 +239,7 @@
         <image name="heart" catalog="system" width="128" height="109"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="map" catalog="system" width="128" height="110"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="sun.max" catalog="system" width="128" height="124"/>
         <systemColor name="linkColor">

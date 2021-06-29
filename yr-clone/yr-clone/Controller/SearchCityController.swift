@@ -160,7 +160,6 @@ extension SearchCityController: UISearchBarDelegate {
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchResults = []
-        guard searchText.count > 2 else { return }
         let text = searchText.lowercased()
         
         Dummy.shared.randomCities.forEach { city in
