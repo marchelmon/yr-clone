@@ -1,58 +1,54 @@
 //
-//  LocationCell.swift
+//  FavoriteCell.swift
 //  yr-clone
 //
-//  Created by marchelmon on 2021-06-27.
+//  Created by marchelmon on 2021-06-28.
 //
 
 import UIKit
 
 
-class LocationCell: UITableViewCell {
+class FavoriteCell: UITableViewCell {
     
     //MARK: - Properties
-    
+
     var weather: WeatherModel? {
         didSet {
-            if weather != nil {
-                configureWeatherCell()
-            } else {
-                configureGetLocation()
-            }
+            guard weather != nil else { return }
+            configureWeatherCell()
         }
     }
-    
-    private let getLocationButton: UIButton = {
-        let button = UIButton(type: .system)
-        let image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.link)
-        button.setImage(image, for: .normal)
-        button.setTitle(" Get Location ", for: .normal)
-        button.setTitleColor(.link, for: .normal)
-        button.backgroundColor = #colorLiteral(red: 0.7689752871, green: 1, blue: 0.9971108456, alpha: 1).withAlphaComponent(0.2)
-        button.isEnabled = false
-        return button
-    }()
-    
+
     let locationLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(white: 0.1, alpha: 0.8)
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.text = "Bermuda"
         return label
     }()
-    
+
     let degreesLabel: UILabel = {
         let label = UILabel()
         label.textColor = #colorLiteral(red: 0.8075824873, green: 0.187832036, blue: 0.1575775297, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.text = "10ºC"
         return label
     }()
-    
+
     let weatherIcon = UIImageView()
     
-    //MARK: - Lifecycle
+    let starImage = UIImage(systemName: "star")?.withTintColor(.lightGray).withRenderingMode(.alwaysOriginal)
+    let fillStarImage = UIImage(systemName: "star.fill")?.withTintColor(.link).withRenderingMode(.alwaysOriginal)
     
+    lazy var starIcon: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(fillStarImage, for: .normal)
+        return button
+    }()
+    
+
+    //MARK: - Lifecycle
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -61,23 +57,21 @@ class LocationCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configureWeatherCell() {
         guard let weather = weather else { return }
         
-        textLabel?.text = nil
-        getLocationButton.removeFromSuperview()
-        if weatherIcon.image != nil { weatherIcon.image = nil }
-
-        let imgConfig = UIImage.SymbolConfiguration(pointSize: 45)
+        let imgConfig = UIImage.SymbolConfiguration(pointSize: 35)
         weatherIcon.image = weather.conditionIcon?.withRenderingMode(.alwaysOriginal).withConfiguration(imgConfig)
                 
         locationLabel.text = weather.city.name
         degreesLabel.text = weather.tempString
         
         addSubview(locationLabel)
-        locationLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
-    
+        locationLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
+
+        
+        
         addSubview(weatherIcon)
         weatherIcon.centerY(inView: self)
         weatherIcon.anchor(right: rightAnchor, paddingRight: 15)
@@ -87,15 +81,7 @@ class LocationCell: UITableViewCell {
         degreesLabel.anchor(right: weatherIcon.leftAnchor, paddingRight: 5)
         
     }
-    
-    func configureGetLocation() {
-        weatherIcon.image = nil
-        degreesLabel.removeFromSuperview()
-        
-        addSubview(getLocationButton)
-        getLocationButton.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
-    }
-    
+
     func addSeparators() {
         
         let overLine = UIView()
@@ -109,6 +95,17 @@ class LocationCell: UITableViewCell {
         
         addSubview(underLine)
         underLine.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
-        
     }
+    
+    func pressedStart(wasAddedToFavorites: Bool) {
+        starIcon.imageView?.image = nil
+        starIcon.imageView?.image = wasAddedToFavorites ? fillStarImage : starImage
+//        if wasAddedToFavorites {
+//            starIcon.setImage(fillStarImage, for: .normal)
+//        } else {
+//            starIcon.setImage(starImage, for: .normal)
+//        }
+    }
+    
 }
+
