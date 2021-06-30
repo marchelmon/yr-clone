@@ -26,7 +26,7 @@ struct WeatherModel {
     }
     
     var rainString: String {
-        return "\(String(format: "%.1f", rain))mm"
+        return String(format: "%.1f", rain)
     }
     
     var windString: String {

@@ -205,7 +205,6 @@ extension ForecastController: WeatherManagerDelegate {
     
 }
 
-
 //MARK: - SearchCityDelegate
 extension ForecastController: SearchCityDelegate {
     
@@ -217,3 +216,6 @@ extension ForecastController: SearchCityDelegate {
         weatherManager.fetchForecast(forCity: cityString)
     }
 }
+
+//MARK: - FavoritesControllerDelegate
+

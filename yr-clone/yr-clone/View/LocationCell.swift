@@ -22,16 +22,20 @@ class LocationCell: UITableViewCell {
         }
     }
     
-    private let getLocationButton: UIButton = {
+    private let navImage = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.link)
+    private lazy var navIcon = UIImageView(image: navImage)
+
+    private lazy var getLocationButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.link)
-        button.setImage(image, for: .normal)
+        button.setImage(navImage, for: .normal)
         button.setTitle(" Get Location ", for: .normal)
         button.setTitleColor(.link, for: .normal)
         button.backgroundColor = #colorLiteral(red: 0.7689752871, green: 1, blue: 0.9971108456, alpha: 1).withAlphaComponent(0.2)
         button.isEnabled = false
         return button
     }()
+    
+    
     
     let locationLabel: UILabel = {
         let label = UILabel()
@@ -109,6 +113,10 @@ class LocationCell: UITableViewCell {
         
         addSubview(underLine)
         underLine.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 1)
+        
+    }
+    
+    func addNavIcon() {
         
     }
 }

@@ -14,15 +14,12 @@ class FavoritesController: UITableViewController {
     //MARK: - Properties
     
     var weatherManager = WeatherManager()
-    
-    
+        
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.title = Service.shared.lastForecast?.city.name ?? "Nomansland"
-        
+                
         tableView.register(FavoriteCell.self, forCellReuseIdentifier: favoriteCell)
         
         weatherManager.delegate = self
@@ -31,7 +28,8 @@ class FavoritesController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        navigationItem.title = Service.shared.lastForecast?.city.name ?? "Nomansland"
+
         tableView.reloadData()
     }
     
@@ -61,7 +59,18 @@ extension FavoritesController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath) as! FavoriteCell
+        guard let cityName = cell.weather?.city.name else { return }
+        guard let navController = tabBarController?.viewControllers?.first as? UINavigationController else { return }
+        guard let forecastController = navController.viewControllers.first as? ForecastController else { return }
+        
+        var cityString = ""
+        for char in cityName {
+            cityString.append(char == " " ? "+" : char)
+        }
+        forecastController.weatherManager.fetchForecast(forCity: cityString)
         tabBarController?.selectedIndex = 0
+
     }
     
 }

@@ -99,6 +99,7 @@ extension SearchCityController {
         if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: currentLocationCell) as! LocationCell
             cell.weather = currentLocationWeather
+            cell.addNavIcon()
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: resultCell, for: indexPath)
@@ -133,7 +134,7 @@ extension SearchCityController: WeatherManagerDelegate {
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         currentLocationWeather = weather
-        
+        print("Did upadte weather searc hcity: \(weather.city.name)")
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
