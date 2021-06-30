@@ -65,7 +65,7 @@ class ForecastCell: UITableViewCell {
     func configureFirstRowCell() {
         selectionStyle = .none
         separatorInset = .zero
-        emptyWeatherCell()
+        emptyCell()
             
         timeTopLabel.text = "Time"
         tempTopLabel.text = "Temp. ºC"
@@ -89,12 +89,13 @@ class ForecastCell: UITableViewCell {
     func configureCell() {
         selectionStyle = .none
         separatorInset = .zero
+        
         guard let weather = weather else { return }
         
-        emptyFirstRowCell()
+        emptyCell()
         
-        if weatherIcon.image != nil { weatherIcon.image = nil }
-        if windIcon.image != nil { windIcon.image = nil }
+        weatherIcon.image = nil
+        windIcon.image = nil
         
         weatherIcon.image = weather.conditionIcon?.withRenderingMode(.alwaysOriginal)
         windIcon.image = weather.windDirectionIcon?.withTintColor(UIColor(white: 0.1, alpha: 0.9)).withRenderingMode(.alwaysOriginal)
@@ -132,20 +133,17 @@ class ForecastCell: UITableViewCell {
         
     }
     
-    func emptyWeatherCell() {
+    func emptyCell() {
+        timeTopLabel.text = ""
+        rainTopLabel.text = ""
+        tempTopLabel.text = ""
+        windTopLabel.text = ""
         weatherIcon.image = nil
         windIcon.image = nil
         hoursLabel.text = ""
         degreesLabel.text = ""
         windLabel.text = ""
         rainLabel.text = ""
-    }
-    
-    func emptyFirstRowCell() {
-        timeTopLabel.text = ""
-        rainTopLabel.text = ""
-        tempTopLabel.text = ""
-        windTopLabel.text = ""
     }
     
     
