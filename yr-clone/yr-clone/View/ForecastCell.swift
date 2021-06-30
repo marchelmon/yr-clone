@@ -73,13 +73,13 @@ class ForecastCell: UITableViewCell {
         windTopLabel.text = "Wind. m/s"
         
         addSubview(timeTopLabel)
-        timeTopLabel.anchor(left: leftAnchor, bottom: bottomAnchor, paddingLeft: 20, paddingBottom: 10)
+        timeTopLabel.anchor(left: safeAreaLayoutGuide.leftAnchor, bottom: bottomAnchor, paddingLeft: 20, paddingBottom: 10)
         
         addSubview(tempTopLabel)
         tempTopLabel.anchor(bottom: bottomAnchor, right: centerXAnchor, paddingBottom: 10, paddingRight: 20)
         
         addSubview(windTopLabel)
-        windTopLabel.anchor(bottom: bottomAnchor, right: rightAnchor, paddingBottom: 10, paddingRight: 15)
+        windTopLabel.anchor(bottom: bottomAnchor, right: safeAreaLayoutGuide.rightAnchor, paddingBottom: 10, paddingRight: 15)
         
         addSubview(rainTopLabel)
         rainTopLabel.anchor(left: centerXAnchor, bottom: bottomAnchor, paddingLeft: 30, paddingBottom: 10)
@@ -106,7 +106,7 @@ class ForecastCell: UITableViewCell {
 
         
         addSubview(hoursLabel)
-        hoursLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
+        hoursLabel.centerY(inView: self, leftAnchor: safeAreaLayoutGuide.leftAnchor, paddingLeft: 20)
         hoursLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         addSubview(degreesLabel)
@@ -120,7 +120,7 @@ class ForecastCell: UITableViewCell {
         
         contentView.addSubview(windIcon)
         windIcon.centerY(inView: self)
-        windIcon.anchor(right: rightAnchor, paddingRight: 15)
+        windIcon.anchor(right: safeAreaLayoutGuide.rightAnchor, paddingRight: 15)
         
         addSubview(windLabel)
         windLabel.centerY(inView: self)

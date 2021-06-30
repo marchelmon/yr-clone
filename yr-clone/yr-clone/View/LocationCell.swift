@@ -76,11 +76,11 @@ class LocationCell: UITableViewCell {
         degreesLabel.text = weather.tempString
         
         addSubview(locationLabel)
-        locationLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
+        locationLabel.centerY(inView: self, leftAnchor: safeAreaLayoutGuide.leftAnchor, paddingLeft: 20)
     
         addSubview(weatherIcon)
         weatherIcon.centerY(inView: self)
-        weatherIcon.anchor(right: rightAnchor, paddingRight: 15)
+        weatherIcon.anchor(right: safeAreaLayoutGuide.rightAnchor, paddingRight: 15)
         
         addSubview(degreesLabel)
         degreesLabel.centerY(inView: self)

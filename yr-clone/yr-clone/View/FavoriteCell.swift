@@ -80,14 +80,14 @@ class FavoriteCell: UITableViewCell {
         degreesLabel.text = weather.tempString
         
         contentView.addSubview(starIcon)
-        starIcon.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
+        starIcon.centerY(inView: self, leftAnchor: safeAreaLayoutGuide.leftAnchor, paddingLeft: 15)
         
         addSubview(locationLabel)
         locationLabel.centerY(inView: self, leftAnchor: starIcon.rightAnchor, paddingLeft: 10)
         
         addSubview(weatherIcon)
         weatherIcon.centerY(inView: self)
-        weatherIcon.anchor(right: rightAnchor, paddingRight: 15)
+        weatherIcon.anchor(right: safeAreaLayoutGuide.rightAnchor, paddingRight: 15)
         
         addSubview(degreesLabel)
         degreesLabel.centerY(inView: self)
