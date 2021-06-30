@@ -64,10 +64,7 @@ extension FavoritesController {
         guard let navController = tabBarController?.viewControllers?.first as? UINavigationController else { return }
         guard let forecastController = navController.viewControllers.first as? ForecastController else { return }
         
-        var cityString = ""
-        for char in cityName {
-            cityString.append(char == " " ? "+" : char)
-        }
+        let cityString = Service.shared.prepareStringForAPI(string: cityName)
         forecastController.weatherManager.fetchForecast(forCity: cityString)
         tabBarController?.selectedIndex = 0
 

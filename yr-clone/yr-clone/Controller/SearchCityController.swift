@@ -38,6 +38,7 @@ class SearchCityController: UITableViewController {
     private let headerSearchBar: UISearchBar = {
         let bar = UISearchBar()
         bar.placeholder = "Search city"
+        bar.returnKeyType = .go
         return bar
     }()
     
@@ -98,8 +99,12 @@ extension SearchCityController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: currentLocationCell) as! LocationCell
-            cell.weather = currentLocationWeather
-            cell.addNavIcon()
+            if currentLocationWeather != nil {
+                cell.weather = currentLocationWeather
+                cell.addNavIcon()
+            } else {
+                cell.configureGetLocation()
+            }
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: resultCell, for: indexPath)
@@ -115,7 +120,8 @@ extension SearchCityController {
         if indexPath.section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! LocationCell
             if let cityName = cell.weather?.city.name {
-                delegate?.didSelectCity(city: cityName)
+                let cityString = Service.shared.prepareStringForAPI(string: cityName)
+                delegate?.didSelectCity(city: cityString)
             } else {
                 getUserLocation()
             }
@@ -134,7 +140,6 @@ extension SearchCityController: WeatherManagerDelegate {
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         currentLocationWeather = weather
-        print("Did upadte weather searc hcity: \(weather.city.name)")
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -175,8 +180,6 @@ extension SearchCityController: UISearchBarDelegate {
 }
 
 
-
-
 //MARK: - CLLocationManagerDelegate
 extension SearchCityController: CLLocationManagerDelegate {
     func getUserLocation() {
@@ -197,3 +200,7 @@ extension SearchCityController: CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
     }
 }
+
+
+
+

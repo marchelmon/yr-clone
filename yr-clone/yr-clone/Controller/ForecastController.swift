@@ -209,10 +209,7 @@ extension ForecastController: WeatherManagerDelegate {
 extension ForecastController: SearchCityDelegate {
     
     func didSelectCity(city: String) {
-        var cityString = ""
-        for char in city {
-            cityString.append(char == " " ? "+" : char)
-        }
+        let cityString = Service.shared.prepareStringForAPI(string: city)
         weatherManager.fetchForecast(forCity: cityString)
     }
 }

@@ -14,11 +14,7 @@ class LocationCell: UITableViewCell {
     
     var weather: WeatherModel? {
         didSet {
-            if weather != nil {
-                configureWeatherCell()
-            } else {
-                configureGetLocation()
-            }
+            configureWeatherCell()
         }
     }
     
@@ -35,8 +31,6 @@ class LocationCell: UITableViewCell {
         return button
     }()
     
-    
-    
     let locationLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(white: 0.1, alpha: 0.8)
@@ -48,7 +42,7 @@ class LocationCell: UITableViewCell {
     let degreesLabel: UILabel = {
         let label = UILabel()
         label.textColor = #colorLiteral(red: 0.8075824873, green: 0.187832036, blue: 0.1575775297, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: 22)
         label.text = "10ºC"
         return label
     }()
@@ -71,9 +65,9 @@ class LocationCell: UITableViewCell {
         
         textLabel?.text = nil
         getLocationButton.removeFromSuperview()
-        if weatherIcon.image != nil { weatherIcon.image = nil }
+        weatherIcon.image = nil
 
-        let imgConfig = UIImage.SymbolConfiguration(pointSize: 45)
+        let imgConfig = UIImage.SymbolConfiguration(pointSize: 35)
         weatherIcon.image = weather.conditionIcon?.withRenderingMode(.alwaysOriginal).withConfiguration(imgConfig)
                 
         locationLabel.text = weather.city.name
@@ -117,6 +111,7 @@ class LocationCell: UITableViewCell {
     }
     
     func addNavIcon() {
-        
+        addSubview(navIcon)
+        navIcon.centerY(inView: self, leftAnchor: locationLabel.rightAnchor, paddingLeft: 5)
     }
 }

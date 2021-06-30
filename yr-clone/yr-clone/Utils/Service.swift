@@ -44,4 +44,12 @@ class Service {
         }
     }
     
+    func prepareStringForAPI(string: String) -> String {
+        var apiString = ""
+        for char in string {
+            apiString.append(char == " " ? "+" : char)
+        }
+        return apiString
+    }
+    
 }
