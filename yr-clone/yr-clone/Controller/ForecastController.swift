@@ -33,9 +33,18 @@ class ForecastController: UITableViewController {
 
         getUserLocation()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-
+        guard let currentWeather = Service.shared.lastForecast else { return }
         
+        if cityIsFavorite(city: currentWeather.city.name).0 {
+            navigationItem.leftBarButtonItem?.image = UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.link)
+        } else {
+            navigationItem.leftBarButtonItem?.image = UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(.lightGray)
+        }
     }
     
     
@@ -43,7 +52,7 @@ class ForecastController: UITableViewController {
     
     @IBAction func starPressed(_ sender: UIBarButtonItem) {
         guard let lastForecast = Service.shared.lastForecast else { return }
-
+                
         let (isFavorite, index) = cityIsFavorite(city: lastForecast.city.name)
         if isFavorite {
             Service.shared.favoriteLocations.remove(at: index!)
