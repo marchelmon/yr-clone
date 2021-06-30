@@ -17,18 +17,13 @@ class SettingsController: UITableViewController {
     private var currentTypeSelection: SettingType?
     private var lastSelectedCell: SettingsCell?
     
-    private lazy var footerImage: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "weather.png").withRenderingMode(.alwaysOriginal))
-        iv.contentMode = .scaleAspectFit
-        return iv
-    }()
-    
     private lazy var footerView: UIView = {
         let footer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
-        let image = UIImageView(image: #imageLiteral(resourceName: "weather.png").withRenderingMode(.alwaysOriginal))
+        let image = UIImageView(image: #imageLiteral(resourceName: "yr-logotext").withRenderingMode(.alwaysOriginal))
+        image.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         image.contentMode = .scaleAspectFit
-        footer.addSubview(footerImage)
-        footerImage.centerY(inView: footer)
+        footer.addSubview(image)
+        image.centerY(inView: footer)
         return footer
     }()
     

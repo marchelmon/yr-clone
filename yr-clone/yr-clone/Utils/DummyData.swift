@@ -42,7 +42,7 @@ class Dummy {
             SettingsRow(withSettingType: .language, text: "Language", selectionText:languageData[0], icon: languageIcon, hasArrow: true),
             SettingsRow(withSettingType: .notifications, text: "Notifications", selectionText: notificationsData[0], icon: bellIcon, hasArrow: true),
             SettingsRow(withSettingType: .mainLocation, text: "Default location", selectionText: mainLocationData[0], icon: mainLocationIcon, hasArrow: true),
-            SettingsRow(withSettingType: .locationBased, text: "Lacation-based forecast", selectionText: locationBasedData[0], icon: nil, hasArrow: true)
+            SettingsRow(withSettingType: .locationBased, text: "Location-based forecast", selectionText: locationBasedData[0], icon: nil, hasArrow: true)
         ]
     }
 }

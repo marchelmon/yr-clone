@@ -73,13 +73,13 @@ class SettingsCell: UITableViewCell {
             iconImage.image = data.icon
         
             addSubview(iconImage)
-            iconImage.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 15)
+            iconImage.centerY(inView: self, leftAnchor:  safeAreaLayoutGuide.leftAnchor, paddingLeft: 15)
         
             addSubview(textStack)
             textStack.centerY(inView: self, leftAnchor: iconImage.rightAnchor, paddingLeft: 15)
         } else {
             addSubview(textStack)
-            textStack.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
+            textStack.centerY(inView: self, leftAnchor: safeAreaLayoutGuide.leftAnchor, paddingLeft: 20)
         }
         
         if data.hasArrow { addArrow() }
@@ -89,7 +89,7 @@ class SettingsCell: UITableViewCell {
     func addArrow() {
         addSubview(arrowIcon)
         arrowIcon.centerY(inView: self)
-        arrowIcon.anchor(right: rightAnchor, paddingRight: 15)
+        arrowIcon.anchor(right: safeAreaLayoutGuide.rightAnchor, paddingRight: 15)
     }
 
     func addOverline() {
@@ -109,7 +109,7 @@ class SettingsCell: UITableViewCell {
     func addTextLabel(withText text: String) {
         cellLabel.text = text
         addSubview(cellLabel)
-        cellLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 20)
+        cellLabel.centerY(inView: self, leftAnchor: safeAreaLayoutGuide.leftAnchor, paddingLeft: 20)
     }
     
 }
